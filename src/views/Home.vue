@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     btnClass() {
-      return ['w-48', 'bg-orange-400', 'font-bold', 'border-2', 'border-orange-600', 'm-3', 'p-5'];
+      return ['w-48', 'font-bold', 'border-2', 'border-red', 'text-red', 'rounded', 'm-3', 'p-5'];
     },
   },
   methods: {

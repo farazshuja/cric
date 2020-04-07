@@ -17,16 +17,49 @@ export default new Vuex.Store({
       'Team1',
       'Team2',
     ],
+    match: null,
+    /*
+    match: {
+      series: 'Series',
+      team1: ['PAK', 'SA'],
+      team2: ['SL', 'WI'],
+      toBat: 'Team1',
+      toBall: 'Team2',
+      inns: [
+        {
+          isDeclared: false,
+          balls: [
+            {
+              id: '0.1',  // 0.0 for out without ball
+              run: 1,
+              ballBy: 'WI',
+              playedBy: 'SA-P1',
+              outBy: 'C.O. by WI'
+            }
+          ]
+        }
+      ]
+    }
+    */
   },
   getters: {
     getCountries(state) {
       return Object.keys(state.countries);
     },
     getTeams(state) {
-      return Object.keys(state.teams);
+      return state.teams;
     },
   },
   mutations: {
+    setMatch(state, data) {
+      this.match = data;
+      this.match.inns = [{
+        isDeclared: false,
+        balls: [],
+      }];
+
+      localStorage.setItem('match', JSON.stringify(data));
+    },
   },
   actions: {
   },

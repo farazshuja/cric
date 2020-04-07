@@ -1,15 +1,17 @@
 <template>
   <div class="h-100">
     <div class="flex flex-row mb-5">
-      <label class="w-32">Tournament:</label>
-      <input class="w-48" type="text" list="series" />
+      <label class="w-32">Series:</label>
+      <input v-model="series" class="w-48 flex-grow" type="text" list="series" />
       <datalist id="series">
         <option>Series-1</option>
+        <option>Series-2</option>
+        <option>Series-3</option>
       </datalist>
     </div>
     <div class="flex flex-row mb-5">
       <label class="w-32">Team1:</label>
-      <select v-model="country1" class="w-48">
+      <select v-model="country1" class="flex-grow">
         <option
           v-for="country in countries"
           :key="country"
@@ -17,8 +19,8 @@
           {{ country }}
         </option>
       </select>
-      <span class="ml-5 mr-5 text-gray-500">-and-</span>
-      <select v-model="country2" class="w-48">
+      <span class="px-2 text-gray-500">and</span>
+      <select v-model="country2" class="flex-grow">
         <option
           v-for="country in countries"
           :key="country"
@@ -29,7 +31,7 @@
     </div>
     <div class="flex flex-row mb-5">
       <label class="w-32">Team2:</label>
-      <select v-model="country3" class="w-48">
+      <select v-model="country3" class="flex-grow">
         <option
           v-for="country in countries"
           :key="country"
@@ -37,8 +39,8 @@
           {{ country }}
         </option>
       </select>
-      <span class="ml-5 mr-5 text-gray-500">-and-</span>
-      <select v-model="country4" class="w-48">
+      <span class="px-2 text-gray-500">and</span>
+      <select v-model="country4" class="flex-grow">
         <option
           v-for="country in countries"
           :key="country"
@@ -49,7 +51,7 @@
     </div>
     <div class="flex flex-row mb-5">
       <label class="w-32">Bat:</label>
-      <select v-model="bat" class="w-48">
+      <select v-model="toBat" class="flex-grow">
         <option
           v-for="team in teams"
           :key="team"
@@ -59,8 +61,8 @@
       </select>
     </div>
     <div class="flex flex-row mb-5">
-      <label class="w-32">Bowl:</label>
-      <select v-model="bowl" class="w-48">
+      <label class="w-32">Ball:</label>
+      <select v-model="toBall" class="flex-grow">
         <option
           v-for="team in teams"
           :key="team"
@@ -70,15 +72,24 @@
       </select>
     </div>
     <p class="text-center">
-      <button class="border-2 border-blue-500 text-blue-600 py-2 px-4 font-semibold rounded">
+      <button
+        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded"
+        @click="startMatch()"
+      >
         Start
+      </button>
+      <button
+        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded ml-1"
+        @click="$router.push({ name: 'Home' })"
+      >
+        Cancel
       </button>
     </p>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   data() {
@@ -87,9 +98,9 @@ export default {
       country2: 'SA',
       country3: 'SL',
       country4: 'WI',
-      teams: ['Team1', 'Team2'],
-      bat: 'Team1',
-      bowl: 'Team2',
+      series: 'Series-1',
+      toBat: 'Team1',
+      toBall: 'Team2',
     };
   },
   computed: {
@@ -97,6 +108,38 @@ export default {
       countries: 'getCountries',
       teams: 'getTeams',
     }),
+  },
+  created() {
+    // redirect to last match if there is some match in LocalStorage
+    const match = localStorage.getItem('match');
+    if (match) {
+      this.setMatch(JSON.parse(match));
+      this.$router.push({ name: 'LastMatch' });
+    }
+  },
+  methods: {
+    isNewMatchValid() {
+      if (this.toBat === this.toBall || !this.series) {
+        return false;
+      }
+      const teams = [this.country1, this.country2, this.country3, this.country4];
+      const set = new Set(teams);
+      return teams.length === set.size;
+    },
+    startMatch() {
+      if (this.isNewMatchValid()) {
+        const data = {
+          series: this.series,
+          team1: [this.country1, this.country2].sort(),
+          team2: [this.country3, this.country4].sort(),
+          toBat: this.toBat,
+          toBall: this.toBall,
+        };
+        this.setMatch(data);
+        this.$router.push({ name: 'LastMatch' });
+      }
+    },
+    ...mapMutations(['setMatch']),
   },
 };
 </script>
