@@ -3,13 +3,20 @@
     <button
       :class="btnClass"
       @click="newMatch()"
-    >New Match</button>
-    <button :class="btnClass">Edit Match</button>
-    <button :class="btnClass">View Match</button>
+    >Match</button>
+    <button
+      :class="btnClass"
+      @click="deleteLastMatch"
+    >Delete Match</button>
+    <button
+      :class="btnClass"
+      @click="saveLastMatch"
+    >Save Match</button>
   </div>
 </template>
 
 <script>
+import firebase from 'firebase';
 
 export default {
   name: 'Home',
@@ -21,8 +28,21 @@ export default {
     },
   },
   methods: {
+    deleteLastMatch() {
+      localStorage.removeItem('match');
+    },
     newMatch() {
       this.$router.push({ name: 'NewMatch' });
+    },
+    saveLastMatch() {
+      const matches = firebase.firestore()
+        .collection('matches');
+      const lastMatch = localStorage.getItem('match');
+      matches.add(JSON.parse(lastMatch))
+        .then(() => {
+          alert('Saved successfully');
+        })
+        .catch(() => alert('Save failed'));
     },
   },
 };

@@ -2,7 +2,7 @@
   <div class="h-100">
     <div class="flex flex-row mb-5">
       <label class="w-32">Series:</label>
-      <input v-model="series" class="w-48 flex-grow" type="text" list="series" />
+      <input v-model="series" class="flex-grow" type="text" list="series" />
       <datalist id="series">
         <option>Series-1</option>
         <option>Series-2</option>
@@ -109,11 +109,11 @@ export default {
       teams: 'getTeams',
     }),
   },
-  created() {
+  async created() {
     // redirect to last match if there is some match in LocalStorage
     const match = localStorage.getItem('match');
     if (match) {
-      this.setMatch(JSON.parse(match));
+      await this.setMatch(JSON.parse(match));
       this.$router.push({ name: 'LastMatch' });
     }
   },
