@@ -34,13 +34,13 @@
       <button
         v-for="i in 7"
         :key="i"
-        class="border-2 border-gray text-gray py-3 px-8 font-semibold rounded mx-1 my-1"
+        class="border-2 border-gray text-gray py-2 px-4 font-semibold rounded mx-1 my-1"
         @click="addBall(i - 1)"
       >
         {{ i - 1 }}
       </button>
     </p>
-    <p class="mt-10 text-center">
+    <p class="mt-5 text-center">
       <button
         class="border-2 border-gray text-gray py-1 px-1 font-semibold rounded mx-1 my-1"
         @click="outBall('C.O.')"
@@ -71,7 +71,7 @@
       :current-tab="currentTab"
       :players="players"
     />
-    <p class="mt-10 text-center">
+    <p class="mt-5 text-center">
       <button
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
         @click="$router.push({ name: 'Home' })"
