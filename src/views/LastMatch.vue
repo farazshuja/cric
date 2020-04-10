@@ -34,7 +34,7 @@
       <button
         v-for="i in 7"
         :key="i"
-        class="border-2 border-gray text-gray py-2 px-4 font-semibold rounded mx-1 my-1"
+        class="border-2 border-gray text-gray py-1 px-3 font-semibold rounded mx-1 my-1"
         @click="addBall(i - 1)"
       >
         {{ i - 1 }}
