@@ -1,11 +1,16 @@
 <template>
-  <div class="text-center">
-    <div class="flex flex-row mb-1">
+  <div
+    class="fixed top-0 left-0 w-full h-full bg-beige text-center"
+    style="z-index: 2"
+  >
+    <div class="flex flex-row mb-2 mt-10 h-10">
       <label class="w-32">Ball:</label>
       <select class="flex-grow" v-model="custom.id">
         <option>Yes</option>
         <option>No</option>
       </select>
+    </div>
+    <div class="flex flex-row mb-2 h10">
       <label class="w-32">Runs:</label>
       <select class="flex-grow" v-model="custom.runs">
         <option>0</option>
@@ -17,27 +22,29 @@
         <option>6</option>
       </select>
     </div>
-    <div class="flex flex-row mb-1">
+    <div class="flex flex-row mb-2 h-10">
       <label class="w-32">Ball by:</label>
       <select class="flex-grow" v-model="custom.ballBy">
         <option
-          v-for="country in countries"
+          v-for="country in getBallCountries"
           :key="country"
         >
           {{ country }}
         </option>
       </select>
+    </div>
+    <div class="flex flex-row mb-2 h-10">
       <label class="w-32">Played by:</label>
       <select class="flex-grow" v-model="custom.playedBy">
         <option
-          v-for="pl in getAllPlayers"
+          v-for="pl in getBatsmen"
           :key="pl"
         >
           {{ pl }}
         </option>
       </select>
     </div>
-    <div class="flex flex-row mb-1">
+    <div class="flex flex-row mb-2 h-10">
       <label class="w-32">Out:</label>
       <select class="flex-grow" v-model="custom.out">
         <option>DNB</option>
@@ -46,23 +53,25 @@
         <option>B.O.</option>
         <option>C.O.</option>
       </select>
+    </div>
+    <div class="flex flex-row mb-2 h-10">
       <label class="w-32">Out By:</label>
       <select class="flex-grow" v-model="custom.outBy">
         <option></option>
         <option
-          v-for="country in countries"
+          v-for="country in getBallCountries"
           :key="country"
         >
           {{ country }}
         </option>
       </select>
     </div>
-    <div class="flex flex-row mb-1">
+    <div class="flex flex-row mb-2 h-10">
       <label class="w-32">Out Player:</label>
       <select class="flex-grow" v-model="custom.outPlayer">
         <option></option>
         <option
-          v-for="pl in getAllPlayers"
+          v-for="pl in getBatsmen"
           :key="pl"
         >
           {{ pl }}
@@ -73,6 +82,10 @@
       class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
       @click="addCustomBall"
     >Ok</button>
+    <button
+      class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
+      @click="$emit('cancel')"
+    >Cancel</button>
   </div>
 </template>
 
@@ -104,9 +117,15 @@ export default {
     };
   },
   computed: {
+    getBatsmen() {
+      return this.getBats(this.currentTab).map((b) => b.player).filter((b) => b !== '---');
+    },
+    getBallCountries() {
+      return this.getBallers(this.currentTab).map((b) => b.country);
+    },
     ...mapGetters({
-      countries: 'getCountries',
-      getAllPlayers: 'getAllPlayers',
+      getBats: 'getBats',
+      getBallers: 'getBallers',
     }),
   },
   methods: {

@@ -30,37 +30,37 @@
         {{ ballToOvers(baller.balls) }} - {{ baller.runs }} - {{ baller.outs }}W
       </div>
     </div>
-    <p class="mt-10 text-center">
+    <p class="mt-5 text-center">
       <button
-        v-for="i in 7"
+        v-for="i in scr"
         :key="i"
-        class="border-2 border-gray text-gray py-1 px-3 font-semibold rounded mx-1 my-1"
-        @click="addBall(i - 1)"
+        class="border-2 border-gray text-gray py-1 px-8 font-semibold rounded mx-1 my-1 text-3xl"
+        @click="addBall(i)"
       >
-        {{ i - 1 }}
+        {{ i }}
       </button>
     </p>
     <p class="mt-5 text-center">
       <button
-        class="border-2 border-gray text-gray py-1 px-1 font-semibold rounded mx-1 my-1"
+        class="border-2 border-gray text-gray py-3 px-4 font-semibold rounded mx-1 my-1"
         @click="outBall('C.O.')"
       >
-        Catch Out
+        C.O.
       </button>
       <button
-        class="border-2 border-gray text-gray py-1 px-4 font-semibold rounded mx-1 my-1"
+        class="border-2 border-gray text-gray py-3 px-4 font-semibold rounded mx-1 my-1"
         @click="outBall('B.O.')"
       >
-        Bowled Out
+        B.O.
       </button>
       <button
-        class="border-2 border-gray text-gray py-1 px-4 font-semibold rounded mx-1 my-1"
+        class="border-2 border-gray text-gray py-3 px-1 font-semibold rounded mx-1 my-1"
         @click="showCustom = !showCustom"
       >
         Custom
       </button>
       <button
-        class="border-2 border-gray text-gray py-1 px-4 font-semibold rounded mx-1 my-1"
+        class="border-2 border-gray text-gray py-3 px-1 font-semibold rounded mx-1 my-1"
         @click="undoLastBall"
       >
         UNDO
@@ -70,8 +70,9 @@
       v-if="showCustom"
       :current-tab="currentTab"
       :players="players"
+      @cancel="showCustom = false"
     />
-    <p class="mt-5 text-center">
+    <p class="mt-3 text-center">
       <button
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
         @click="$router.push({ name: 'Home' })"
@@ -115,6 +116,7 @@ export default {
       currentTab: 0, // inns 1
       showCustom: false,
       tabs: ['INNS - 1', 'INNS - 2', 'INNS - 3', 'INNS-4', 'POINTS'],
+      scr: [0, 1, 2, 3, 4, 6],
     };
   },
   computed: {
