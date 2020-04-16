@@ -21,6 +21,22 @@ const routes = [
     component: () => import('../views/LastMatch.vue'),
   },
   {
+    path: '/best-players',
+    name: 'BestPlayers',
+    component: () => import('../views/BestPlayers.vue'),
+  },
+  {
+    path: '/series',
+    name: 'Series',
+    component: () => import('../views/Series.vue'),
+  },
+  {
+    path: '/view-match/:id',
+    name: 'ViewMatch',
+    component: () => import('../views/ViewMatch.vue'),
+    props: (route) => ({ id: route.params.id }),
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting

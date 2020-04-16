@@ -22,6 +22,7 @@ export default new Vuex.Store({
     match: null,
     /*
     match: {
+      id: 'hash64',
       series: 'Series',
       team1: ['PAK', 'SA'],
       team2: ['SL', 'WI'],
@@ -210,7 +211,7 @@ export default new Vuex.Store({
       data.inns = data.inns || [getNewInns(toBat, toBall)];
 
       state.match = data;
-      localStorage.setItem('match', JSON.stringify(data));
+      // localStorage.setItem('match', JSON.stringify(data));
     },
     // Push new inns if all-out, all-over, or inns declared
     handleNextInns(state, { innsIndex, isDeclared }) {

@@ -4,9 +4,10 @@
       <label class="w-32">Series:</label>
       <input v-model="series" class="flex-grow" type="text" list="series" />
       <datalist id="series">
-        <option>Series-1</option>
-        <option>Series-2</option>
         <option>Series-3</option>
+        <option>Series-4</option>
+        <option>Series-5</option>
+        <option>Series-6</option>
       </datalist>
     </div>
     <div class="flex flex-row mb-5">
@@ -89,6 +90,7 @@
 </template>
 
 <script>
+import firebase from 'firebase';
 import { mapGetters, mapMutations } from 'vuex';
 
 export default {
@@ -98,7 +100,7 @@ export default {
       country2: 'SA',
       country3: 'SL',
       country4: 'WI',
-      series: 'Series-1',
+      series: 'Series-3',
       toBat: 'Team1',
       toBall: 'Team2',
     };
@@ -135,8 +137,17 @@ export default {
           toBat: this.toBat,
           toBall: this.toBall,
         };
-        this.setMatch(data);
-        this.$router.push({ name: 'LastMatch' });
+        const matches = firebase.firestore()
+          .collection('matches');
+
+        matches.add(data)
+          .then((d) => {
+            data.id = d.id;
+            this.setMatch(data);
+            localStorage.setItem('match', JSON.stringify(data));
+            this.$router.push({ name: 'LastMatch' });
+          })
+          .catch(() => alert('Save failed'));
       }
     },
     ...mapMutations(['setMatch']),

@@ -153,6 +153,8 @@ export default {
         innsIndex: this.currentTab,
         ball,
       });
+
+      this.$emit('cancel');
     },
   },
 };

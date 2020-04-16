@@ -5,6 +5,7 @@
 </template>
 
 <style src="./assets/tailwind.css"/>
+<style src="vue-good-table/dist/vue-good-table.css" />
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

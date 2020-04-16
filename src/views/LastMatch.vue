@@ -72,6 +72,11 @@
       :players="players"
       @cancel="showCustom = false"
     />
+    <custom-menu
+      v-if="showCustomMenu"
+      @cancel="showCustomMenu = false"
+      @customMenu="onCustomMenu"
+    />
     <p class="mt-3 text-center">
       <button
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
@@ -81,10 +86,16 @@
       </button>
       <button
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
+        @click="showCustomMenu = true"
+      >
+        +++
+      </button>
+      <!-- <button
+        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
         @click="innsDeclare"
       >
         DECLARE
-      </button>
+      </button> -->
     </p>
     <div class="fixed bottom-0 left-0 w-full">
       <div class="tabs flex flex-row">
@@ -103,18 +114,22 @@
 </template>
 
 <script>
+import firebase from 'firebase';
 import { mapGetters } from 'vuex';
 import ballToOvers from '@/utils.js';
+import CustomMenu from '../components/CustomMenu.vue';
 import CustomBall from '../components/CustomBall.vue';
 
 export default {
   components: {
     CustomBall,
+    CustomMenu,
   },
   data() {
     return {
       currentTab: 0, // inns 1
       showCustom: false,
+      showCustomMenu: false,
       tabs: ['INNS - 1', 'INNS - 2', 'INNS - 3', 'INNS-4', 'POINTS'],
       scr: [0, 1, 2, 3, 4, 6],
     };
@@ -185,6 +200,15 @@ export default {
     activateLastInns() {
       this.currentTab = this.match.inns.length - 1;
     },
+    onCustomMenu(e) {
+      if (e === 'Declare') {
+        this.innsDeclare();
+      } else if (e === 'Save') {
+        this.save();
+      } else if (e === 'Delete') {
+        this.delete();
+      }
+    },
     openTab(i) {
       if (this.match.inns[i] || i === 4) {
         this.currentTab = i;
@@ -231,6 +255,22 @@ export default {
     },
     undoLastBall() {
       this.$store.dispatch('undoLastBall', this.currentTab);
+    },
+    save() {
+      firebase.firestore()
+        .collection('matches')
+        .doc(this.match.id)
+        .update(this.match)
+        .then(() => {
+          alert('Saved successfully');
+        });
+    },
+    delete() {
+      // eslint-disable-next-line
+      if(confirm('Are you sure, you want to delete local?')) {
+        localStorage.removeItem('match');
+        this.$router.push({ name: 'Home' });
+      }
     },
   },
 };

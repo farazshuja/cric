@@ -6,12 +6,12 @@
     >Match</button>
     <button
       :class="btnClass"
-      @click="deleteLastMatch"
-    >Delete Match</button>
+      @click="getSeries"
+    >Series</button>
     <button
       :class="btnClass"
-      @click="saveLastMatch"
-    >Save Match</button>
+      @click="getHallOfFames"
+    >Hall of Fames</button>
   </div>
 </template>
 
@@ -43,6 +43,12 @@ export default {
           alert('Saved successfully');
         })
         .catch(() => alert('Save failed'));
+    },
+    getSeries() {
+      this.$router.push({ name: 'Series' });
+    },
+    getHallOfFames() {
+      this.$router.push({ name: 'BestPlayers' });
     },
   },
 };
