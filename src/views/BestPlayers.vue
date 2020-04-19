@@ -2,6 +2,10 @@
   <div class="flex flex-col items-center h-full justify-center">
     <h1 class="text-2xl">Best players</h1>
     <vue-good-table
+      :sort-options="{
+        enabled: true,
+        initialSortBy: {field: 'average', type: 'desc'}
+      }"
       :columns="columns"
       :rows="rows"/>
   </div>
@@ -10,9 +14,7 @@
 <script>
 import { VueGoodTable } from 'vue-good-table';
 import { mapGetters } from 'vuex';
-// import data1 from '../data/cric.json';
 
-// const data = data1.slice(1, 2);
 const players = {};
 
 export default {
@@ -56,6 +58,7 @@ export default {
   },
   methods: {
     async calculateBestPlayers() {
+      this.$store.commit('setIsLoading', true);
       this.$store.getters.getAllPlayers.forEach((player) => {
         players[player] = {
           matches: 0,
@@ -79,6 +82,9 @@ export default {
 
       data.forEach((d) => {
         d.inns.forEach((inn) => {
+          if (inn.balls.length === 0) {
+            return;
+          }
           inn.bats.forEach((bat) => {
             if (bat.player !== '---') {
               players[bat.player].inns += 1;
@@ -106,6 +112,7 @@ export default {
         players[key].average = outs ? (players[key].runs / outs).toFixed(2) : 'N/A';
         players[key].strikeRate = (100 * (players[key].runs / players[key].balls)).toFixed(2);
       });
+      this.$store.commit('setIsLoading', false);
     },
   },
 };

@@ -1,20 +1,26 @@
 <template>
   <div class="h-100">
-    <div class="mb-5">
-      <div
-        v-for="(player, i) in players"
-        :key="i"
-        :class="{'facing' : player.isFacing }"
-        class="bat-row"
-      >
-        <label class="inline-block w-24">{{ player.player }}:</label>
-        <span>{{ player.runs }} ({{ player.balls }})</span> <span class="text-sm italic">{{ player.out }}</span>
-        <span v-if="player.isFacing" class="pl-2 text-mehroon">&#9728;</span>
-      </div>
-      <hr class="mt-2 mb-2" />
-      <div class="total">
-        <label class="inline-block w-24">Total:</label>
-        <span>{{ total.runs}}/{{total.outs}} ({{total.overs}} overs)</span>
+    <div
+      v-if="currentTab !== 4"
+      class="mb-5"
+    >
+      <div class="flex flex-row">
+        <div>
+          <div
+            v-for="(player, i) in players"
+            :key="i"
+            :class="{'facing' : player.isFacing }"
+            class="bat-row"
+          >
+            <label class="inline-block w-18">{{ player.player }}:</label>
+            <span>{{ player.runs }} ({{ player.balls }})</span> <span class="text-sm italic">{{ player.out }}</span>
+            <span v-if="player.isFacing" class="pl-2 text-mehroon">&#9728;</span>
+          </div>
+        </div>
+        <div class="total ml-1 pl-1 text-right flex-grow">
+          <div class="text-3xl">{{ total.runs}}/<span class="text-2xl">{{total.outs}}</span></div>
+          <div class="text-2xl">{{total.overs}} ov</div>
+        </div>
       </div>
       <hr class="mt-4 mb-2" />
       <div
@@ -22,12 +28,13 @@
         :key="baller.country"
         class="balling"
       >
-        <label class="inline-block w-24">{{ baller.country }}:
+        <label class="inline-block w-18">{{ baller.country }}:
           <span v-if="baller.isBalling" class="pl-2 text-mehroon">&#9728;</span>
         </label>
         {{ ballToOvers(baller.balls) }} - {{ baller.runs }} - {{ baller.outs }}W
       </div>
     </div>
+    <points v-else />
     <p class="mt-3 text-center">
       <button
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
@@ -56,8 +63,12 @@
 import firebase from 'firebase';
 import { mapGetters } from 'vuex';
 import ballToOvers from '@/utils.js';
+import Points from '../components/Points.vue';
 
 export default {
+  components: {
+    Points,
+  },
   props: {
     id: {
       type: String,
@@ -103,11 +114,13 @@ export default {
     }),
   },
   async created() {
+    this.$store.commit('setIsLoading', true);
     firebase.firestore()
       .collection('matches')
       .doc(this.id)
       .get()
       .then(async (d) => {
+        this.$store.commit('setIsLoading', false);
         const match = d.data();
         if (match) {
           if (match) {

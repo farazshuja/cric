@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import firebase from 'firebase';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 
@@ -26,6 +27,11 @@ const routes = [
     component: () => import('../views/BestPlayers.vue'),
   },
   {
+    path: '/best-ballers',
+    name: 'BestBallers',
+    component: () => import('../views/BestBallers.vue'),
+  },
+  {
     path: '/series',
     name: 'Series',
     component: () => import('../views/Series.vue'),
@@ -37,12 +43,9 @@ const routes = [
     props: (route) => ({ id: route.params.id }),
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login.vue'),
   },
 ];
 
@@ -50,6 +53,16 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    next();
+  } else if (to.name !== 'Login') {
+    next({ name: 'Login' });
+  }
+  next();
 });
 
 export default router;

@@ -56,6 +56,7 @@ export const getNewInns = (toBat, toBall) => ({
   ],
 });
 
+/** Get Total from inns.bats */
 export const getTotal = (bats) => {
   const total = {
     runs: 0,

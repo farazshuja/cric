@@ -48,28 +48,33 @@ export default {
   },
   methods: {
     async loadSeries() {
-      const response = await fetch('https://us-central1-cric-bdc72.cloudfunctions.net/getSeries');
-      const data = await response.json();
-      const series = {};
-      data.forEach((d) => {
-        const match = {
-          id: d.id,
-          team1: d.team1,
-          team2: d.team2,
-        };
-        if (series[d.series]) {
-          series[d.series].push(match);
-        } else {
-          series[d.series] = [match];
-        }
-      });
-
-      Object.keys(series).sort().reverse().forEach((key) => {
-        this.series.push({
-          series: key,
-          matches: series[key],
+      this.$store.commit('setIsLoading', true);
+      try {
+        const response = await fetch('https://us-central1-cric-bdc72.cloudfunctions.net/getSeries');
+        const data = await response.json();
+        const series = {};
+        data.forEach((d) => {
+          const match = {
+            id: d.id,
+            team1: d.team1,
+            team2: d.team2,
+          };
+          if (series[d.series]) {
+            series[d.series].push(match);
+          } else {
+            series[d.series] = [match];
+          }
         });
-      });
+
+        Object.keys(series).sort().reverse().forEach((key) => {
+          this.series.push({
+            series: key,
+            matches: series[key],
+          });
+        });
+      // eslint-disable-next-line
+      } catch (e) {}
+      this.$store.commit('setIsLoading', false);
     },
     onMatchClick(match) {
       const localMatch = localStorage.getItem('match');

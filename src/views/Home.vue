@@ -12,6 +12,10 @@
       :class="btnClass"
       @click="getHallOfFames"
     >Hall of Fames</button>
+    <button
+      :class="btnClass"
+      @click="logout"
+    >Logout</button>
   </div>
 </template>
 
@@ -49,6 +53,11 @@ export default {
     },
     getHallOfFames() {
       this.$router.push({ name: 'BestPlayers' });
+    },
+    logout() {
+      firebase.auth().signOut().then(() => {
+        this.$router.replace({ name: 'Login' });
+      });
     },
   },
 };

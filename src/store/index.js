@@ -7,6 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    isLoading: false,
     countries: {
       PAK: ['PAK-P1', 'PAK-P3'],
       SL: ['SL-P1', 'SL-P3'],
@@ -63,6 +64,9 @@ export default new Vuex.Store({
     */
   },
   getters: {
+    getIsLoading(state) {
+      return state.isLoading;
+    },
     getAllPlayers(state) {
       return Object.keys(state.countries).flatMap((key) => state.countries[key]);
     },
@@ -89,6 +93,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setIsLoading(state, payload) {
+      state.isLoading = payload;
+    },
     addBallToInns(state, { innsIndex, ball }) {
       const inns = state.match.inns[innsIndex];
       let { id } = ball;

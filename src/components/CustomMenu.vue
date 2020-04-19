@@ -1,16 +1,17 @@
 <template>
   <div
-    class="fixed top-0 left-0 w-full h-full bg-beige text-center"
+    class="fixed top-0 left-0 w-full h-full bg-beige text-center flex flex-col items-center h-full justify-center"
     style="z-index: 2"
   >
     <button
         v-for="btn in btns"
         :key="btn"
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
+        class="border-2 border-gray text-gray py-1 px-5 my-2 font-semibold rounded mx-1"
         @click="btnClick(btn)"
       >
-        {{ btn }}
-      </button>
+      {{ btn }}
+    </button>
+
   </div>
 </template>
 
