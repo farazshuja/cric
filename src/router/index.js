@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 
@@ -55,14 +55,14 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const user = firebase.auth().currentUser;
-  if (user) {
-    next();
-  } else if (to.name !== 'Login') {
-    next({ name: 'Login' });
-  }
-  next();
-});
+// router.beforeEach((to, from, next) => {
+//   const user = firebase.auth().currentUser;
+//   if (user) {
+//     next();
+//   } else if (to.name !== 'Login') {
+//     next({ name: 'Login' });
+//   }
+//   next();
+// });
 
 export default router;
