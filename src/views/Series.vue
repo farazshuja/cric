@@ -26,7 +26,7 @@
         class="pl-8 py-2"
         @click="onMatchClick(match)"
       >
-        Match-{{ i + 1 }}
+        Match-{{ s.matches.length - i }}
         <span class="text-sm">{{ match.team1 }} vs {{ match.team2 }}</span>
       </li>
     </ul>

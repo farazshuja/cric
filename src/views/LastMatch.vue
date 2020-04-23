@@ -106,7 +106,7 @@
           v-for="(tab, i) in tabs"
           :key="tab"
           :class="{'bg-green': i === currentTab}"
-          class="text-red py-1 flex-grow text-center"
+          class="text-red py-3 flex-grow text-center"
           @click="openTab(i)"
         >
           {{ tab }}
@@ -215,6 +215,8 @@ export default {
     openTab(i) {
       if (this.match.inns[i] || i === 4) {
         this.currentTab = i;
+      } else {
+        alert('No inns');
       }
     },
     addBall(runs) {

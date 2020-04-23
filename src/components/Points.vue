@@ -7,13 +7,13 @@
       :key="i"
     >
       <div class="total">
-        <label class="inline-block w-24">{{ s.team }}:</label>
+        <label class="inline-block w-18">{{ s.team }}:</label>
         <span
           v-for="(inn, j) in s.inns"
           :key="j"
         >
           {{ inn.runs}}/{{inn.outs}} ({{ ballToOvers(inn.balls) }} overs)
-          <span class="text-sm px-3" v-if="j===0">&#9882;</span>
+          <span class="text-sm px-1" v-if="j===0">&#9882;</span>
         </span>
       </div>
     </div>
@@ -24,9 +24,9 @@
     >
       <tr>
           <th class="text-left">Country</th>
-          <th class="text-right">Batting</th>
-          <th class="text-right">Wickets</th>
-          <th class="text-right">Team Batting</th>
+          <th class="text-right">B</th>
+          <th class="text-right">W</th>
+          <th class="text-right">TB</th>
           <th class="text-right">WLD</th>
           <th class="text-right">Total</th>
       </tr>
@@ -34,7 +34,7 @@
         v-for="(point, i) in points"
         :key="i"
       >
-        <td><label class="w24">{{ point.country }}</label></td>
+        <td><label>{{ point.country }}</label></td>
         <td class="text-right">{{ point.batPoints }}</td>
         <td class="text-right">{{ point.ballerPoints }}</td>
         <td class="text-right">{{ point.batTeamPoints }}</td>

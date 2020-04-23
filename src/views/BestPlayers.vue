@@ -33,6 +33,8 @@ export default {
         { label: 'S/R', field: 'strikeRate', type: 'number' },
         { label: 'Highest', field: 'highestScore', type: 'number' },
         { label: 'Not outs', field: 'notOuts', type: 'number' },
+        { label: 'Dots', field: 'dots', type: 'number' },
+        { label: 'Dots %', field: 'dotsPer100Balls', type: 'number' },
         { label: 'Ducks', field: 'ducks', type: 'number' },
         { label: '4\'s', field: 'fours', type: 'number' },
         { label: '6\'s', field: 'sixes', type: 'number' },
@@ -69,6 +71,8 @@ export default {
           strikeRate: 0,
           highestScore: 0,
           notOuts: 0,
+          dots: 0,
+          dotsPer100Balls: 0,
           ducks: 0,
           fours: 0,
           sixes: 0,
@@ -99,6 +103,7 @@ export default {
           });
 
           inn.balls.forEach((b) => {
+            players[b.playedBy].dots += b.runs === 0;
             players[b.playedBy].runs += b.runs;
             players[b.playedBy].balls += 1;
             players[b.playedBy].fours += b.runs === 4 ? 1 : 0;
@@ -111,6 +116,7 @@ export default {
         const outs = players[key].inns - players[key].notOuts;
         players[key].average = outs ? (players[key].runs / outs).toFixed(2) : 'N/A';
         players[key].strikeRate = (100 * (players[key].runs / players[key].balls)).toFixed(2);
+        players[key].dotsPer100Balls = parseInt(100 * (players[key].dots / players[key].balls), 10);
       });
       this.$store.commit('setIsLoading', false);
     },

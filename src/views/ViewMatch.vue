@@ -49,7 +49,7 @@
           v-for="(tab, i) in tabs"
           :key="tab"
           :class="{'bg-green': i === currentTab}"
-          class="text-red py-1 flex-grow text-center"
+          class="text-red py-3 flex-grow text-center"
           @click="openTab(i)"
         >
           {{ tab }}

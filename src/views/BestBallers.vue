@@ -14,7 +14,7 @@
 <script>
 import { VueGoodTable } from 'vue-good-table';
 // import { mapGetters } from 'vuex';
-import data from '@/data/allMatches.json';
+// import data from '@/data/allMatches.json';
 import ballToOvers from '@/utils.js';
 
 export const getBestBallerScore = (prevBest, baller) => {
@@ -70,8 +70,8 @@ export default {
     // ...mapGetters({
     // }),
   },
-  created() {
-    this.calculateBestPlayers();
+  async created() {
+    await this.calculateBestPlayers();
     const rows = [];
     Object.keys(ballers).forEach((key, i) => {
       rows[i] = ballers[key];
@@ -104,9 +104,8 @@ export default {
           },
         };
       });
-      // const response = await fetch('https://us-central1-cric-bdc72.cloudfunctions.net/allMatches');
-      // const data = await response.json();
-      // console.log(data);
+      const response = await fetch('https://us-central1-cric-bdc72.cloudfunctions.net/allMatches');
+      const data = await response.json();
       data.forEach((d) => {
         d.inns.forEach((inn) => {
           if (inn.balls.length === 0) {

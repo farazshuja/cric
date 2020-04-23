@@ -5,13 +5,13 @@ const cors = require('cors')({origin: true});
 // local
 var serviceAccount = require('./cric-677e48f98a03.json');
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: 'https://cric-bdc72.firebaseio.com'
-// });
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://cric-bdc72.firebaseio.com'
+});
 
 // deploy
-admin.initializeApp();
+// admin.initializeApp();
 
 const firestore = admin.firestore()
 
@@ -35,8 +35,10 @@ exports.getSeries = functions.https.onRequest(async (request, response) => {
       series: d.series,
       team1: d.team1,
       team2: d.team2,
+      created: doc.createTime.seconds,
     };
-  });
+  })
+  .sort((a, b) => b.created - a.created);
   response.send(data1);
 });
 
