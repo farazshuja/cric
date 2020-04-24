@@ -4,14 +4,19 @@
       <label class="w-32">Series:</label>
       <input v-model="series" class="flex-grow" type="text" list="series" />
       <datalist id="series">
-        <option>Series-3</option>
         <option>Series-4</option>
         <option>Series-5</option>
         <option>Series-6</option>
+        <option>Series-7</option>
       </datalist>
     </div>
     <div class="flex flex-row mb-5">
-      <label class="w-32">Team1:</label>
+      <label
+        class="w-32"
+        @click="isBatting = 'Team1'"
+      >
+        Team1: <span v-if="isBatting === 'Team1'">🏏</span>
+      </label>
       <select v-model="country1" class="flex-grow">
         <option
           v-for="country in countries"
@@ -31,7 +36,12 @@
       </select>
     </div>
     <div class="flex flex-row mb-5">
-      <label class="w-32">Team2:</label>
+      <label
+        class="w-32"
+        @click="isBatting = 'Team2'"
+      >
+        Team2: <span v-if="isBatting === 'Team2'">🏏</span>
+      </label>
       <select v-model="country3" class="flex-grow">
         <option
           v-for="country in countries"
@@ -50,7 +60,7 @@
         </option>
       </select>
     </div>
-    <div class="flex flex-row mb-5">
+    <!-- <div class="flex flex-row mb-5">
       <label class="w-32">Bat:</label>
       <select v-model="toBat" class="flex-grow">
         <option
@@ -71,7 +81,7 @@
           {{ team }}
         </option>
       </select>
-    </div>
+    </div> -->
     <p class="text-center">
       <button
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded"
@@ -103,6 +113,7 @@ export default {
       series: 'Series-3',
       toBat: 'Team1',
       toBall: 'Team2',
+      isBatting: 'Team1',
     };
   },
   computed: {
@@ -121,7 +132,7 @@ export default {
   },
   methods: {
     isNewMatchValid() {
-      if (this.toBat === this.toBall || !this.series) {
+      if (!this.series) {
         return false;
       }
       const teams = [this.country1, this.country2, this.country3, this.country4];
@@ -134,8 +145,8 @@ export default {
           series: this.series,
           team1: [this.country1, this.country2].sort(),
           team2: [this.country3, this.country4].sort(),
-          toBat: this.toBat,
-          toBall: this.toBall,
+          toBat: this.isBatting === 'Team1' ? 'Team1' : 'Team2',
+          toBall: this.isBatting === 'Team1' ? 'Team2' : 'Team1',
         };
         const matches = firebase.firestore()
           .collection('matches');
@@ -148,6 +159,8 @@ export default {
             this.$router.push({ name: 'LastMatch' });
           })
           .catch(() => alert('Save failed'));
+      } else {
+        alert('Match no valid');
       }
     },
     ...mapMutations(['setMatch']),
