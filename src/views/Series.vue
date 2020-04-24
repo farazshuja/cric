@@ -19,7 +19,12 @@
       :key="s.series"
       class="mb-4"
     >
-      <li class="text-2xl">{{ s.series }}</li>
+      <li
+        class="text-2xl"
+        @click="onSeriesClick(s)"
+      >
+        {{ s.series }}
+      </li>
       <li
         v-for="(match, i) in s.matches"
         :key="i"
@@ -87,6 +92,9 @@ export default {
         }
       }
       this.$router.push({ name: 'ViewMatch', params: { id: match.id } });
+    },
+    onSeriesClick(s) {
+      this.$router.push({ name: 'SeriesPoints', params: { series: s.series } });
     },
     ...mapMutations(['setMatch']),
   },

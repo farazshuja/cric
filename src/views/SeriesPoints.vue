@@ -1,0 +1,104 @@
+<template>
+  <div class="flex flex-col h-full">
+    <table
+      v-if="points.length > 0"
+      class="w-full"
+    >
+      <tr>
+          <th class="text-left">Country</th>
+          <th class="text-right">B</th>
+          <th class="text-right">W</th>
+          <th class="text-right">TB</th>
+          <th class="text-right">WLD</th>
+          <th class="text-right">Total</th>
+      </tr>
+      <tr
+        v-for="(point, i) in points"
+        :key="i"
+      >
+        <td><label>{{ point.country }}</label></td>
+        <td class="text-right">{{ point.batPoints }}</td>
+        <td class="text-right">{{ point.ballerPoints }}</td>
+        <td class="text-right">{{ point.batTeamPoints }}</td>
+        <td class="text-right">{{ point.WLD }}</td>
+        <td class="text-right">{{ point.total }}</td>
+      </tr>
+    </table>
+    <p class="mt-3 text-center">
+      <button
+        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
+        @click="$router.push({ name: 'Series' })"
+      >
+        BACK
+      </button>
+    </p>
+  </div>
+</template>
+
+<script>
+import firebase from 'firebase';
+import { addOrPush, calculateAllPoints } from '../utils';
+
+export default {
+  name: 'SeriesPoints',
+  data() {
+    return {
+      points: {},
+    };
+  },
+  props: {
+    series: {
+      type: String,
+      default: null,
+    },
+  },
+  created() {
+    if (this.series) {
+      this.loadSeriesPoints();
+    } else {
+      alert('No series');
+    }
+  },
+  methods: {
+    loadSeriesPoints() {
+      const vm = this;
+      const points = {};
+      vm.$store.commit('setIsLoading', true);
+      firebase.firestore()
+        .collection('matches')
+        .where('series', '==', this.series)
+        .get()
+        .then((querySnapshot) => {
+          const matches = [];
+          querySnapshot.forEach((d) => {
+            const obj = calculateAllPoints(d.data());
+            matches.push(obj.points);
+          });
+          console.log(matches);
+          matches.forEach((match) => {
+            match.forEach((c) => {
+              addOrPush(points, c.country, 'WLD', c.WLD);
+              addOrPush(points, c.country, 'ballerPoints', c.ballerPoints);
+              addOrPush(points, c.country, 'batPoints', c.batPoints);
+              addOrPush(points, c.country, 'batTeamPoints', c.batTeamPoints);
+              addOrPush(points, c.country, 'total', c.total);
+            });
+          });
+          this.points = Object.keys(points).map((key) => {
+            const point = points[key];
+            return {
+              country: key,
+              WLD: point.WLD.join('-'),
+              ballerPoints: point.ballerPoints.join('-'),
+              batPoints: point.batPoints.join('-'),
+              batTeamPoints: point.batTeamPoints.join('-'),
+              total: point.total.reduce((a, b) => a + b, 0),
+            };
+          }).sort((a, b) => b.total - a.total);
+
+          this.$store.commit('setIsLoading', false);
+        });
+    },
+  },
+};
+</script>

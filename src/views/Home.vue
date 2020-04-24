@@ -12,7 +12,7 @@
       :class="btnClass"
       @click="logout"
     >Logout</button>
-    <span class="fixed bottom-0 right-0 text-sm p-1">v. 1.2</span>
+    <span class="fixed bottom-0 right-0 text-sm p-1">v. 1.3</span>
   </div>
 </template>
 

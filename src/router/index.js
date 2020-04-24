@@ -43,6 +43,12 @@ const routes = [
     props: (route) => ({ id: route.params.id }),
   },
   {
+    path: '/series-points/:series',
+    name: 'SeriesPoints',
+    component: () => import('../views/SeriesPoints.vue'),
+    props: (route) => ({ series: route.params.series }),
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue'),
