@@ -116,6 +116,8 @@ export const scoreToWinPoints = (score) => {
         } else {
           result = teamResult(team1, 5, team2, 0);
         }
+      } else if ((score[0].inns[0].runs + score[0].inns[1].runs) < (score[1].inns[0].runs + score[1].inns[1].runs)) {
+        result = teamResult(team1, 0, team2, 5);
       }
     }
   }
