@@ -1,6 +1,9 @@
 <template>
   <div class="h-100">
-    <div class="mb-5">
+    <div
+      v-if="currentTab !== 4"
+      class="mb-5"
+    >
       <div class="flex flex-row">
         <div>
           <div
@@ -33,42 +36,45 @@
         {{ ballToOvers(baller.balls) }} - {{ baller.runs }} - {{ baller.outs }}W
       </div>
     </div>
-    <p class="mt-5 text-center">
-      <button
-        v-for="i in scr"
-        :key="i"
-        class="border-2 border-gray text-gray py-1 px-8 font-semibold rounded mx-1 my-1 text-3xl"
-        @click="addBall(i)"
-      >
-        {{ i }}
-      </button>
-    </p>
-    <p class="mt-5 text-center">
-      <button
-        class="border-2 border-gray text-gray py-3 px-4 font-semibold rounded mx-1 my-1"
-        @click="outBall('C.O.')"
-      >
-        C.O.
-      </button>
-      <button
-        class="border-2 border-gray text-gray py-3 px-4 font-semibold rounded mx-1 my-1"
-        @click="outBall('B.O.')"
-      >
-        B.O.
-      </button>
-      <button
-        class="border-2 border-gray text-gray py-3 px-1 font-semibold rounded mx-1 my-1"
-        @click="showCustom = !showCustom"
-      >
-        Custom
-      </button>
-      <button
-        class="border-2 border-gray text-gray py-3 px-1 font-semibold rounded mx-1 my-1"
-        @click="undoLastBall"
-      >
-        UNDO
-      </button>
-    </p>
+    <points v-else />
+    <div v-if="currentTab !== 4">
+      <p class="mt-5 text-center">
+        <button
+          v-for="i in scr"
+          :key="i"
+          class="border-2 border-gray text-gray py-1 px-8 font-semibold rounded mx-1 my-1 text-3xl"
+          @click="addBall(i)"
+        >
+          {{ i }}
+        </button>
+      </p>
+      <p class="mt-5 text-center">
+        <button
+          class="border-2 border-gray text-gray py-3 px-4 font-semibold rounded mx-1 my-1"
+          @click="outBall('C.O.')"
+        >
+          C.O.
+        </button>
+        <button
+          class="border-2 border-gray text-gray py-3 px-4 font-semibold rounded mx-1 my-1"
+          @click="outBall('B.O.')"
+        >
+          B.O.
+        </button>
+        <button
+          class="border-2 border-gray text-gray py-3 px-1 font-semibold rounded mx-1 my-1"
+          @click="showCustom = !showCustom"
+        >
+          Custom
+        </button>
+        <button
+          class="border-2 border-gray text-gray py-3 px-1 font-semibold rounded mx-1 my-1"
+          @click="undoLastBall"
+        >
+          UNDO
+        </button>
+      </p>
+    </div>
     <custom-ball
       v-if="showCustom"
       :current-tab="currentTab"
@@ -88,17 +94,12 @@
         HOME
       </button>
       <button
+        v-if="currentTab !== 4"
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
         @click="showCustomMenu = true"
       >
         +++
       </button>
-      <!-- <button
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
-        @click="innsDeclare"
-      >
-        DECLARE
-      </button> -->
     </p>
     <div class="fixed bottom-0 left-0 w-full">
       <div class="tabs flex flex-row">
@@ -122,11 +123,13 @@ import { mapGetters } from 'vuex';
 import ballToOvers from '@/utils.js';
 import CustomMenu from '../components/CustomMenu.vue';
 import CustomBall from '../components/CustomBall.vue';
+import Points from '../components/Points.vue';
 
 export default {
   components: {
     CustomBall,
     CustomMenu,
+    Points,
   },
   data() {
     return {

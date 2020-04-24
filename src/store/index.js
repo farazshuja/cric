@@ -80,13 +80,13 @@ export default new Vuex.Store({
       return state.match;
     },
     getBats: (state) => (innsIndex) => {
-      if (state.match && state.match.inns) {
+      if (state.match && state.match.inns && state.match.inns[innsIndex]) {
         return state.match.inns[innsIndex].bats;
       }
       return [];
     },
     getBallers: (state) => (innsIndex) => {
-      if (state.match && state.match.inns) {
+      if (state.match && state.match.inns && state.match.inns[innsIndex]) {
         return state.match.inns[innsIndex].ballers;
       }
       return [];

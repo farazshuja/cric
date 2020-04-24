@@ -17,6 +17,10 @@
         </span>
       </div>
     </div>
+    <div>
+      <label class="inline-block mt-2 mr-2">Remaining:</label>
+      <span>{{ remainingOvers }} overs</span>
+    </div>
     <hr class="mt-5" />
     <table
       v-if="points"
@@ -62,11 +66,14 @@ export const runsToPoints = (runs) => {
 
 export const innsToBatPoints = (inn) => {
   const p = {};
-  inn.bats.forEach((b) => {
-    p[b.country] = {
-      batPoints: runsToPoints(b.runs),
-    };
-  });
+  inn
+    .bats
+    .filter((b) => b.country !== '---')
+    .forEach((b) => {
+      p[b.country] = {
+        batPoints: runsToPoints(b.runs),
+      };
+    });
   return p;
 };
 
@@ -82,9 +89,12 @@ export const teamResult = (team1, p1, team2, p2) => {
 export const innsToTeamPoints = (inn) => {
   const p = {};
   let totalRuns = 0;
-  inn.bats.forEach((b) => {
-    totalRuns += b.runs;
-  });
+  inn
+    .bats
+    .filter((b) => b.country !== '---')
+    .forEach((b) => {
+      totalRuns += b.runs;
+    });
   const t1 = inn.bats[0].country;
   const t2 = inn.bats[1].country;
   const pts = runsToPoints(totalRuns);
@@ -139,7 +149,13 @@ export default {
     return {
       score: null,
       points: null,
+      remaingBalls: 150,
     };
+  },
+  computed: {
+    remainingOvers() {
+      return ballToOvers(this.remaingBalls);
+    },
   },
   created() {
     this.loadAllRuns();
@@ -152,7 +168,7 @@ export default {
       let points = {};
       if (match) {
         match.inns.forEach((inn, i) => {
-          const bats = this.$store.getters.getBats(i);
+          const bats = this.$store.getters.getBats(i).filter((b) => b.country !== '---');
           const team = [...new Set(bats.map((b) => b.country))].sort().join('-');
           const total = getTotal(bats);
           if (total.balls === 0) {
@@ -173,6 +189,7 @@ export default {
               innsToTeamPoints(inn),
             );
           }
+          this.remaingBalls -= total.balls;
         });
       }
       this.score = Object.keys(result).map((key) => ({
