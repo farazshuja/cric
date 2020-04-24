@@ -60,28 +60,6 @@
         </option>
       </select>
     </div>
-    <!-- <div class="flex flex-row mb-5">
-      <label class="w-32">Bat:</label>
-      <select v-model="toBat" class="flex-grow">
-        <option
-          v-for="team in teams"
-          :key="team"
-        >
-          {{ team }}
-        </option>
-      </select>
-    </div>
-    <div class="flex flex-row mb-5">
-      <label class="w-32">Ball:</label>
-      <select v-model="toBall" class="flex-grow">
-        <option
-          v-for="team in teams"
-          :key="team"
-        >
-          {{ team }}
-        </option>
-      </select>
-    </div> -->
     <p class="text-center">
       <button
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded"
@@ -110,7 +88,7 @@ export default {
       country2: 'SA',
       country3: 'SL',
       country4: 'WI',
-      series: 'Series-3',
+      series: 'Series-4',
       toBat: 'Team1',
       toBall: 'Team2',
       isBatting: 'Team1',
