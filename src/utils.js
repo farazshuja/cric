@@ -77,7 +77,7 @@ export const getTotal = (bats) => {
 export const runsToPoints = (runs) => {
   const fp = runs - 20;
   let pts = 0;
-  if (fp > 0) {
+  if (fp >= 0) {
     pts = 1;
     pts += parseInt(fp / 15, 10);
   }
