@@ -3,15 +3,15 @@ const functions = require('firebase-functions');
 const cors = require('cors')({origin: true});
 
 // local
-var serviceAccount = require('./cric-677e48f98a03.json');
+// var serviceAccount = require('./cric-677e48f98a03.json');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://cric-bdc72.firebaseio.com'
-});
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: 'https://cric-bdc72.firebaseio.com'
+// });
 
 // deploy
-// admin.initializeApp();
+admin.initializeApp();
 
 const firestore = admin.firestore()
 
