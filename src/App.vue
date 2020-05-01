@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="h-screen bg-beige p-2"
+    class="h-screen bg-opal p-2"
   >
     <router-view/>
     <div v-if="getIsLoading" class="fixed w-full h-full top-0 left-0 text-center bg-gray05">
@@ -32,7 +32,6 @@ export default {
 }
 label {
   font-weight: bold;
-  color: #4a5568;
 }
 .w-18 { width: 4.5rem; }
 </style>

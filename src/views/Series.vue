@@ -1,48 +1,49 @@
 <template>
-  <div class="flex flex-col h-full">
-    <p class="mt-3 text-center">
-      <button
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
-        @click="$router.push({ name: 'Home' })"
-      >
-        HOME
-      </button>
-      <button
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
-        @click="$router.push({ name: 'NewMatch' })"
-      >
-        NEW MATCH
-      </button>
-    </p>
-    <ul
-      v-for="s in series"
-      :key="s.series"
-      class="mb-4"
+  <div class="series">
+    <cr-nav
+      :links="['New Match', 'Back']"
+      @linkClick="onNavClick"
+    />
+    <div
+      v-if="series"
+      class="mt-12 flex flex-col"
     >
-      <li
-        class="text-2xl"
-        @click="onSeriesClick(s)"
-      >
-        {{ s.series }}
-      </li>
-      <li
-        v-for="(match, i) in s.matches"
+      <div
+        v-for="(s, i) in series"
         :key="i"
-        class="pl-8 py-2"
-        @click="onMatchClick(match)"
+        class="bg-white shadow-md rounded-lg px-3 py-2 mb-2"
       >
-        Match-{{ s.matches.length - i }}
-        <span class="text-sm">{{ match.team1 }} vs {{ match.team2 }}</span>
-      </li>
-    </ul>
+        <div
+          @click="onSeriesClick(s)"
+          class="block cursor-pointer hover:text-silver text-liver text-lg font-semibold py-2 px-2"
+        >
+            {{ s.series }}
+        </div>
+        <div
+          v-for="(m, j) in s.matches"
+          :key="j"
+          class="text-sm"
+          @click="onMatchClick(m)"
+        >
+            <div class="flex justify-start cursor-pointer text-gray hover:text-white hover:bg-opal rounded-md px-2 py-2">
+                <span class="bold text-silver">Match {{ s.matches.length - j}}.</span>
+                <div class="flex-grow font-medium px-2">{{ m.team1.join('-') }} vs {{m.team2.join('-') }}</div>
+            </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex';
+import CrNav from '@/components/CrNav.vue';
 
 export default {
   name: 'Series',
+  components: {
+    CrNav,
+  },
   data() {
     return {
       series: [],
@@ -95,6 +96,13 @@ export default {
     },
     onSeriesClick(s) {
       this.$router.push({ name: 'SeriesPoints', params: { series: s.series } });
+    },
+    onNavClick(e) {
+      if (e === 'Back') {
+        this.$router.push({ name: 'Home' });
+      } else if (e === 'New Match') {
+        this.$router.push({ name: 'NewMatch' });
+      }
     },
     ...mapMutations(['setMatch']),
   },

@@ -1,8 +1,12 @@
 <template>
   <div class="h-100">
+    <cr-nav
+      :links="['Back']"
+      @linkClick="onNavClick"
+    />
     <div
       v-if="currentTab !== 4"
-      class="mb-5"
+      class="mt-12 mb-5"
     >
       <div class="flex flex-row">
         <div>
@@ -14,7 +18,7 @@
           >
             <label class="inline-block w-18">{{ player.player }}:</label>
             <span>{{ player.runs }} ({{ player.balls }})</span> <span class="text-sm italic">{{ player.out }}</span>
-            <span v-if="player.isFacing" class="pl-2 text-mehroon">&#9728;</span>
+            <span v-if="player.isFacing" class="pl-2 text-liver">&#9728;</span>
           </div>
         </div>
         <div class="total ml-1 pl-1 text-right flex-grow">
@@ -29,27 +33,19 @@
         class="balling"
       >
         <label class="inline-block w-18">{{ baller.country }}:
-          <span v-if="baller.isBalling" class="pl-2 text-mehroon">&#9728;</span>
+          <span v-if="baller.isBalling" class="pl-2 text-liver">&#9728;</span>
         </label>
         {{ ballToOvers(baller.balls) }} - {{ baller.runs }} - {{ baller.outs }}W
       </div>
     </div>
-    <points v-else />
-    <p class="mt-3 text-center">
-      <button
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
-        @click="$router.push({ name: 'Series' })"
-      >
-        BACK
-      </button>
-    </p>
+    <points v-else class="mt-12" />
     <div class="fixed bottom-0 left-0 w-full">
       <div class="tabs flex flex-row">
         <div
           v-for="(tab, i) in tabs"
           :key="tab"
-          :class="{'bg-green': i === currentTab}"
-          class="text-red py-3 flex-grow text-center"
+          :class="{'bg-liver text-white': i === currentTab}"
+          class="cursor-pointer py-3 flex-grow text-center"
           @click="openTab(i)"
         >
           {{ tab }}
@@ -63,10 +59,12 @@
 import firebase from 'firebase';
 import { mapGetters } from 'vuex';
 import ballToOvers from '@/utils.js';
+import CrNav from '@/components/CrNav.vue';
 import Points from '../components/Points.vue';
 
 export default {
   components: {
+    CrNav,
     Points,
   },
   props: {
@@ -142,6 +140,11 @@ export default {
     openTab(i) {
       if (this.match.inns[i] || i === 4) {
         this.currentTab = i;
+      }
+    },
+    onNavClick(e) {
+      if (e === 'Back') {
+        this.$router.push({ name: 'Series' });
       }
     },
   },

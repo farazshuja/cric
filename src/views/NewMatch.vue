@@ -1,6 +1,10 @@
 <template>
   <div class="h-100">
-    <div class="flex flex-row mb-5">
+    <cr-nav
+      :links="['Back']"
+      @linkClick="onNavClick"
+    />
+    <div class="flex flex-row mt-12 mb-5">
       <label class="w-32">Series:</label>
       <input v-model="series" class="flex-grow" type="text" list="series" />
       <datalist id="series">
@@ -61,7 +65,9 @@
       </select>
     </div>
     <p class="text-center">
-      <button
+      <cr-button @click.native="startMatch()">Start</cr-button>
+      <cr-button @click.native="$router.push({ name: 'Home' })">Cancel</cr-button>
+      <!-- <button
         class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded"
         @click="startMatch()"
       >
@@ -72,7 +78,7 @@
         @click="$router.push({ name: 'Home' })"
       >
         Cancel
-      </button>
+      </button> -->
     </p>
   </div>
 </template>
@@ -80,8 +86,15 @@
 <script>
 import firebase from 'firebase';
 import { mapGetters, mapMutations } from 'vuex';
+import CrButton from '@/components/CrButton.vue';
+import CrNav from '@/components/CrNav.vue';
 
 export default {
+  name: 'NewMatch',
+  components: {
+    CrNav,
+    CrButton,
+  },
   data() {
     return {
       country1: 'PAK',
@@ -139,6 +152,11 @@ export default {
           .catch(() => alert('Save failed'));
       } else {
         alert('Match no valid');
+      }
+    },
+    onNavClick(e) {
+      if (e === 'Back') {
+        this.$router.push({ name: 'Home' });
       }
     },
     ...mapMutations(['setMatch']),

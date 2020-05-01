@@ -1,8 +1,12 @@
 <template>
   <div class="h-100">
+    <cr-nav
+      :links="['Declare', 'Save', 'Delete', 'Back']"
+      @linkClick="onNavClick"
+    />
     <div
       v-if="currentTab !== 4"
-      class="mb-5"
+      class="mt-12 mb-5"
     >
       <div class="flex flex-row">
         <div>
@@ -15,7 +19,7 @@
           >
             <label class="inline-block w-18">{{ player.player }}:</label>
             <span>{{ player.runs }} ({{ player.balls }})</span> <span class="text-sm italic">{{ player.out }}</span>
-            <span v-if="player.isFacing" class="pl-2 text-mehroon">&#9728;</span>
+            <span v-if="player.isFacing" class="pl-2 text-liver">&#9728;</span>
           </div>
         </div>
         <div class="total ml-1 pl-1 text-right flex-grow">
@@ -31,48 +35,28 @@
         @click="setActiveBaller(baller)"
       >
         <label class="inline-block w-18">{{ baller.country }}:
-          <span v-if="baller.isBalling" class="pl-2 text-mehroon">&#9728;</span>
+          <span v-if="baller.isBalling" class="pl-2 font-normal text-liver">&#9728;</span>
         </label>
         {{ ballToOvers(baller.balls) }} - {{ baller.runs }} - {{ baller.outs }}W
       </div>
     </div>
-    <points v-else />
+    <points class="mt-12" v-else />
     <div v-if="currentTab !== 4">
       <p class="mt-5 text-center">
-        <button
+        <cr-button
           v-for="i in scr"
           :key="i"
-          class="border-2 border-gray text-gray py-1 px-8 font-semibold rounded mx-1 my-1 text-3xl"
-          @click="addBall(i)"
+          size="r"
+          @click.native="addBall(i)"
         >
           {{ i }}
-        </button>
+        </cr-button>
       </p>
-      <p class="mt-5 text-center">
-        <button
-          class="border-2 border-gray text-gray py-3 px-4 font-semibold rounded mx-1 my-1"
-          @click="outBall('C.O.')"
-        >
-          C.O.
-        </button>
-        <button
-          class="border-2 border-gray text-gray py-3 px-4 font-semibold rounded mx-1 my-1"
-          @click="outBall('B.O.')"
-        >
-          B.O.
-        </button>
-        <button
-          class="border-2 border-gray text-gray py-3 px-1 font-semibold rounded mx-1 my-1"
-          @click="showCustom = !showCustom"
-        >
-          Custom
-        </button>
-        <button
-          class="border-2 border-gray text-gray py-3 px-1 font-semibold rounded mx-1 my-1"
-          @click="undoLastBall"
-        >
-          UNDO
-        </button>
+      <p class="mt-1 text-center">
+        <cr-button @click.native="outBall('C.O.')">C.O.</cr-button>
+        <cr-button @click.native="outBall('B.O.')">B.O.</cr-button>
+        <cr-button @click.native="showCustom = !showCustom">Custom</cr-button>
+        <cr-button @click.native="undoLastBall">UNDO</cr-button>
       </p>
     </div>
     <custom-ball
@@ -81,33 +65,13 @@
       :players="players"
       @cancel="showCustom = false"
     />
-    <custom-menu
-      v-if="showCustomMenu"
-      @cancel="showCustomMenu = false"
-      @customMenu="onCustomMenu"
-    />
-    <p class="mt-3 text-center">
-      <button
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
-        @click="$router.push({ name: 'Home' })"
-      >
-        HOME
-      </button>
-      <button
-        v-if="currentTab !== 4"
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
-        @click="showCustomMenu = true"
-      >
-        +++
-      </button>
-    </p>
     <div class="fixed bottom-0 left-0 w-full">
       <div class="tabs flex flex-row">
         <div
           v-for="(tab, i) in tabs"
           :key="tab"
-          :class="{'bg-green': i === currentTab}"
-          class="text-red py-3 flex-grow text-center"
+          :class="{'bg-liver text-white': i === currentTab}"
+          class="cursor-pointer py-3 flex-grow text-center"
           @click="openTab(i)"
         >
           {{ tab }}
@@ -121,14 +85,16 @@
 import firebase from 'firebase';
 import { mapGetters } from 'vuex';
 import ballToOvers from '@/utils.js';
-import CustomMenu from '../components/CustomMenu.vue';
+import CrNav from '@/components/CrNav.vue';
+import CrButton from '@/components/CrButton.vue';
 import CustomBall from '../components/CustomBall.vue';
 import Points from '../components/Points.vue';
 
 export default {
   components: {
+    CrButton,
+    CrNav,
     CustomBall,
-    CustomMenu,
     Points,
   },
   data() {
@@ -278,6 +244,23 @@ export default {
       if(confirm('Are you sure, you want to delete local?')) {
         localStorage.removeItem('match');
         this.$router.push({ name: 'Home' });
+      }
+    },
+    onNavClick(e) {
+      switch (e) {
+        case 'Back':
+          this.$router.push({ name: 'Series' });
+          break;
+        case 'Declare':
+          this.innsDeclare();
+          break;
+        case 'Save':
+          this.save();
+          break;
+        case 'Delete':
+          this.delete();
+          break;
+        default: break;
       }
     },
   },

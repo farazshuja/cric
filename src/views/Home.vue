@@ -1,32 +1,25 @@
 <template>
   <div class="flex flex-col items-center h-full justify-center">
-    <button
-      :class="btnClass"
-      @click="newMatch()"
-    >Match</button>
-    <button
-      :class="btnClass"
-      @click="getSeries"
-    >Series</button>
-    <button
-      :class="btnClass"
-      @click="logout"
-    >Logout</button>
-    <span class="fixed bottom-0 right-0 text-sm p-1">v. 1.3</span>
+    <cr-button
+      size="lg"
+      @click.native="newMatch"
+    >Match</cr-button>
+    <cr-button
+      size="lg"
+      @click.native="getSeries"
+    >Series</cr-button>
+    <span class="fixed bottom-0 right-0 text-sm p-1">v. 2.0</span>
   </div>
 </template>
 
 <script>
 import firebase from 'firebase';
+import CrButton from '@/components/CrButton.vue';
 
 export default {
   name: 'Home',
   components: {
-  },
-  computed: {
-    btnClass() {
-      return ['w-48', 'font-bold', 'border-2', 'border-red', 'text-red', 'rounded', 'm-3', 'p-5'];
-    },
+    CrButton,
   },
   methods: {
     deleteLastMatch() {
@@ -50,11 +43,6 @@ export default {
     },
     getHallOfFames() {
       this.$router.push({ name: 'BestPlayers' });
-    },
-    logout() {
-      firebase.auth().signOut().then(() => {
-        this.$router.replace({ name: 'Login' });
-      });
     },
   },
 };
