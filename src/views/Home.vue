@@ -8,7 +8,7 @@
       size="lg"
       @click.native="getSeries"
     >Series</cr-button>
-    <span class="fixed bottom-0 right-0 text-sm p-1">v. 2.0</span>
+    <span class="fixed bottom-0 right-0 text-sm p-1">v. 2.1</span>
   </div>
 </template>
 

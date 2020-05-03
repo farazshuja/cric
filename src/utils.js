@@ -140,14 +140,22 @@ export const scoreToWinPoints = (score) => {
         result = teamResult(team1, 0, team2, 5);
       }
     } else if (totalInns === 4) {
-      if (score[1].inns[1].outs === 3) {
-        if ((score[0].inns[0].runs + score[0].inns[1].runs) < (score[1].inns[0].runs + score[1].inns[1].runs)) {
+      const isFollowOn = (score[0].inns[0].runs / 2 > score[1].inns[0].runs);
+      const t1Score = score[0].inns[0].runs + score[0].inns[1].runs;
+      const t2Score = score[1].inns[0].runs + score[1].inns[1].runs;
+      if (isFollowOn) {
+        if (t1Score > t2Score) {
+          result = teamResult(team1, 5, team2, 0);
+        } else if (score[0].inns[1].out === 3 && t2Score > t1Score) {
           result = teamResult(team1, 0, team2, 5);
-        } else {
+        }
+      } else {
+        // eslint-disable-next-line
+        if (t2Score > t1Score) {
+          result = teamResult(team1, 0, team2, 5);
+        } else if (score[1].inns[1].out === 3 && t1Score > t2Score) {
           result = teamResult(team1, 5, team2, 0);
         }
-      } else if ((score[0].inns[0].runs + score[0].inns[1].runs) < (score[1].inns[0].runs + score[1].inns[1].runs)) {
-        result = teamResult(team1, 0, team2, 5);
       }
     }
   }

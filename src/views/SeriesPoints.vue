@@ -1,8 +1,12 @@
 <template>
   <div class="flex flex-col h-full">
+    <cr-nav
+      :links="['Back']"
+      @linkClick="onNavClick"
+    />
     <table
       v-if="points.length > 0"
-      class="w-full"
+      class="w-full mt-12"
     >
       <tr>
           <th class="text-left">Country</th>
@@ -24,23 +28,19 @@
         <td class="text-right">{{ point.total }}</td>
       </tr>
     </table>
-    <p class="mt-3 text-center">
-      <button
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded mx-1"
-        @click="$router.push({ name: 'Series' })"
-      >
-        BACK
-      </button>
-    </p>
   </div>
 </template>
 
 <script>
 import firebase from 'firebase';
+import CrNav from '@/components/CrNav.vue';
 import { addOrPush, calculateAllPoints } from '../utils';
 
 export default {
   name: 'SeriesPoints',
+  components: {
+    CrNav,
+  },
   data() {
     return {
       points: {},
@@ -70,10 +70,13 @@ export default {
         .get()
         .then((querySnapshot) => {
           const matches = [];
-          querySnapshot.forEach((d) => {
-            const obj = calculateAllPoints(d.data());
-            matches.push(obj.points);
-          });
+          querySnapshot
+            .docs
+            .sort((a, b) => a.timestamp - b.timestamp)
+            .forEach((d) => {
+              const obj = calculateAllPoints(d.data());
+              matches.push(obj.points);
+            });
           console.log(matches);
           matches.forEach((match) => {
             match.forEach((c) => {
@@ -98,6 +101,11 @@ export default {
 
           this.$store.commit('setIsLoading', false);
         });
+    },
+    onNavClick(e) {
+      if (e === 'Back') {
+        this.$router.push({ name: 'Series' });
+      }
     },
   },
 };

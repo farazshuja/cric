@@ -138,6 +138,7 @@ export default {
           team2: [this.country3, this.country4].sort(),
           toBat: this.isBatting === 'Team1' ? 'Team1' : 'Team2',
           toBall: this.isBatting === 'Team1' ? 'Team2' : 'Team1',
+          timestamp: parseInt(new Date().getTime() / 1000, 10),
         };
         const matches = firebase.firestore()
           .collection('matches');

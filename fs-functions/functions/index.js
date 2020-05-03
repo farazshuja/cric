@@ -23,21 +23,6 @@ exports.allMatches = functions.https.onRequest(async (request, response) => {
   response.send(snapshot.docs.map(doc => doc.data()));
 });
 
-exports.allMatchesWithDate = functions.https.onRequest(async (request, response) => {
-  cors(request, response, () => {});
-  const snapshot = await firestore
-    .collection('matches')
-    .get();
-  const data1 = snapshot.docs.map(doc => {
-    const d = doc.data();
-    return {
-      timestamp: doc.createTime.seconds,
-      data: d,
-    };
-  });
-  response.send(data1);
-});
-
 exports.getSeries = functions.https.onRequest(async (request, response) => {
   cors(request, response, () => {});
   const snapshot = await firestore
