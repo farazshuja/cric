@@ -19,7 +19,7 @@
     </div>
     <div>
       <label class="inline-block mt-2 mr-2">Remaining:</label>
-      <span>{{ remainingOvers }} overs</span>
+      <span>{{ remainingOvers }} ov / {{ leading.team }} lead: {{ leading.runs }}</span>
     </div>
     <hr class="mt-5" />
     <table
@@ -59,6 +59,10 @@ export default {
       score: null,
       points: null,
       remaingBalls: 150,
+      leading: {
+        team: '',
+        runs: '',
+      },
     };
   },
   computed: {
@@ -77,6 +81,19 @@ export default {
       this.score = obj.score;
       this.points = obj.points;
       this.remaingBalls = obj.remaingBalls;
+
+      if (this.score.length === 2) {
+        const t1Score = this.score[0].inns.reduce((prev, cur) => prev + cur.runs, 0);
+        const t2Score = this.score[1].inns.reduce((prev, cur) => prev + cur.runs, 0);
+
+        if (t1Score > t2Score) {
+          this.leading.team = this.score[0].team;
+          this.leading.runs = t1Score - t2Score;
+        } else {
+          this.leading.team = this.score[1].team;
+          this.leading.runs = t2Score - t1Score;
+        }
+      }
     },
   },
 };
