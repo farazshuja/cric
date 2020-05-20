@@ -8,10 +8,11 @@
       <label class="w-32">Series:</label>
       <input v-model="series" class="flex-grow" type="text" list="series" />
       <datalist id="series">
-        <option>Series-4</option>
-        <option>Series-5</option>
-        <option>Series-6</option>
-        <option>Series-7</option>
+        <option>Series-8</option>
+        <option>Series-9</option>
+        <option>Series-10</option>
+        <option>Series-11</option>
+        <option>Series-12</option>
       </datalist>
     </div>
     <div class="flex flex-row mb-5">
@@ -101,7 +102,7 @@ export default {
       country2: 'SA',
       country3: 'SL',
       country4: 'WI',
-      series: 'Series-4',
+      series: 'Series-8',
       toBat: 'Team1',
       toBall: 'Team2',
       isBatting: 'Team1',
