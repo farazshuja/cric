@@ -124,6 +124,7 @@ export const innsToTeamPoints = (inn) => {
 };
 
 export const scoreToWinPoints = (score) => {
+  debugger;
   let result = null;
   if (score && score.length === 2) {
     const totalInns = score[0].inns.length + score[1].inns.length;
@@ -146,14 +147,14 @@ export const scoreToWinPoints = (score) => {
       if (isFollowOn) {
         if (t1Score > t2Score) {
           result = teamResult(team1, 5, team2, 0);
-        } else if (score[0].inns[1].out === 3 && t2Score > t1Score) {
+        } else if (score[0].inns[1].outs === 3 && t2Score > t1Score) {
           result = teamResult(team1, 0, team2, 5);
         }
       } else {
         // eslint-disable-next-line
         if (t2Score > t1Score) {
           result = teamResult(team1, 0, team2, 5);
-        } else if (score[1].inns[1].out === 3 && t1Score > t2Score) {
+        } else if (score[1].inns[1].outs === 3 && t1Score > t2Score) {
           result = teamResult(team1, 5, team2, 0);
         }
       }
