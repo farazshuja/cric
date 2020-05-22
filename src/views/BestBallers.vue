@@ -104,8 +104,7 @@ export default {
           },
         };
       });
-      const response = await fetch('https://us-central1-cric-bdc72.cloudfunctions.net/allMatches');
-      const data = await response.json();
+      const data = await this.$store.dispatch('getAllMatches');
       data.forEach((d) => {
         d.inns.forEach((inn) => {
           if (inn.balls.length === 0) {

@@ -56,8 +56,7 @@ export default {
     async loadSeries() {
       this.$store.commit('setIsLoading', true);
       try {
-        const response = await fetch('https://us-central1-cric-bdc72.cloudfunctions.net/getSeries');
-        const data = await response.json();
+        const data = await this.$store.dispatch('getSeries');
         const series = {};
         data.forEach((d) => {
           const match = {

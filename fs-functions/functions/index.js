@@ -15,7 +15,7 @@ admin.initializeApp();
 
 const firestore = admin.firestore()
 
-exports.allMatches = functions.https.onRequest(async (request, response) => {
+/* exports.allMatches = functions.https.onRequest(async (request, response) => {
   cors(request, response, () => {});
   const snapshot = await firestore
     .collection('matches')
@@ -40,7 +40,7 @@ exports.getSeries = functions.https.onRequest(async (request, response) => {
   })
   .sort((a, b) => b.created - a.created);
   response.send(data1);
-});
+}); */
 
 // exports.updatePlayer = functions.firestore
 //   .document('matches/{docId}')

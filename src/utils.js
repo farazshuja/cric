@@ -124,7 +124,6 @@ export const innsToTeamPoints = (inn) => {
 };
 
 export const scoreToWinPoints = (score) => {
-  debugger;
   let result = null;
   if (score && score.length === 2) {
     const totalInns = score[0].inns.length + score[1].inns.length;

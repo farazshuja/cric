@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import firebase from 'firebase';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import ballToOvers, { getNewInns, getTotal } from '@/utils.js';
@@ -251,6 +252,27 @@ export default new Vuex.Store({
     undoLastBall(context, innsIndex) {
       context.commit('undoLastBall', innsIndex);
       localStorage.setItem('match', JSON.stringify(context.state.match));
+    },
+    async getAllMatches() {
+      const snapshot = await firebase.firestore()
+        .collection('matches')
+        .get();
+      return snapshot.docs.map((doc) => doc.data());
+    },
+    async getSeries() {
+      const snapshot = await firebase.firestore()
+        .collection('matches')
+        .get();
+      return snapshot.docs.map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          series: d.series,
+          team1: d.team1,
+          team2: d.team2,
+          created: d.timestamp,
+        };
+      }).sort((a, b) => b.created - a.created);
     },
   },
   modules: {
