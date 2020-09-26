@@ -24,6 +24,9 @@ export default {
 <style src="./assets/tailwind.css"/>
 <style src="vue-good-table/dist/vue-good-table.css" />
 <style lang="scss">
+body {
+  @apply bg-opal;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

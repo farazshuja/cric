@@ -28,17 +28,21 @@
         <td class="text-right">{{ point.total }}</td>
       </tr>
     </table>
+    <best-players :series="series" />
   </div>
 </template>
 
 <script>
 import firebase from 'firebase';
 import CrNav from '@/components/CrNav.vue';
+import BestPlayers from '@/views/BestPlayers.vue';
 import { addOrPush, calculateAllPoints } from '../utils';
+
 
 export default {
   name: 'SeriesPoints',
   components: {
+    BestPlayers,
     CrNav,
   },
   data() {
@@ -77,7 +81,6 @@ export default {
               const obj = calculateAllPoints(d.data());
               matches.push(obj.points);
             });
-          console.log(matches);
           matches.forEach((match) => {
             match.forEach((c) => {
               addOrPush(points, c.country, 'WLD', c.WLD);
@@ -98,7 +101,6 @@ export default {
               total: point.total.reduce((a, b) => a + b, 0),
             };
           }).sort((a, b) => b.total - a.total);
-
           this.$store.commit('setIsLoading', false);
         });
     },

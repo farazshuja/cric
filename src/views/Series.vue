@@ -71,7 +71,11 @@ export default {
           }
         });
 
-        Object.keys(series).sort().reverse().forEach((key) => {
+        Object.keys(series).sort((a, b) => {
+          const a1 = Number(a.split('-'));
+          const b1 = Number(b.split('-'));
+          return b1 - a1;
+        }).forEach((key) => {
           this.series.push({
             series: key,
             matches: series[key],

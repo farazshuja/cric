@@ -90,9 +90,11 @@ export const innsToBatPoints = (inn) => {
     .bats
     .filter((b) => b.country !== '---')
     .forEach((b) => {
-      p[b.country] = {
-        batPoints: runsToPoints(b.runs),
-      };
+      if (!p[b.country]) {
+        p[b.country] = {
+          batPoints: runsToPoints(b.runs),
+        };
+      }
     });
   return p;
 };
@@ -238,6 +240,108 @@ export const addOrPush = (obj, p1, p2, v) => {
     // eslint-disable-next-line
     obj[p1][p2] = [v];
   }
+};
+
+export const matchToBats = (match, idx) => {
+  if (match && match.inns && match.inns[idx]) {
+    return match.inns[idx].bats;
+  }
+  return [];
+};
+
+export const matchToBallers = (match, idx) => {
+  if (match && match.inns && match.inns[idx]) {
+    return match.inns[idx].ballers;
+  }
+  return [];
+};
+
+function isNotOut(ball) {
+  return ball.out === 'not out' || ball.out === 'DNB';
+}
+
+// eslint-disable-next-line
+export const isScoreCount = (ball, eq) => {
+  return ball.runs === eq ? 1 : 0;
+};
+
+function maidenOverCalc() {
+  let isMaiden = false;
+  let totalRuns = 0;
+  return (ball) => {
+    totalRuns += ball.runs;
+    // if first ball
+    if (ball.id.indexOf('.1') > -1) {
+      totalRuns = 0;
+    } else if (ball.id.indexOf('.0') > -1) {
+      // is last ball
+      isMaiden = totalRuns === 0;
+      totalRuns = 0;
+      return isMaiden;
+    }
+    return false;
+  };
+}
+
+/**
+ * Calculate scoreCard for all the bats and balls for the match
+ * It should also have info against individual team
+ */
+export const matchToScoreCard = (match) => {
+  const scoreCard = {};
+  if (match && match.inns) {
+    match.inns.forEach((inn) => {
+      const isMaiden = maidenOverCalc();
+      inn.balls.forEach((ball) => {
+        const batKey = `${ball.playedBy}vs${ball.ballBy}`;
+        const bat = scoreCard[batKey];
+        if (!bat) {
+          scoreCard[batKey] = {
+            runs: ball.runs,
+            balls: 1,
+            zeros: isScoreCount(ball, 0),
+            fours: isScoreCount(ball, 4),
+            sixes: isScoreCount(ball, 6),
+          };
+        } else {
+          scoreCard[batKey].runs += ball.runs;
+          scoreCard[batKey].balls += 1;
+          scoreCard[batKey].zeros += isScoreCount(ball, 0);
+          scoreCard[batKey].fours += isScoreCount(ball, 4);
+          scoreCard[batKey].sixes += isScoreCount(ball, 6);
+        }
+        const baller = scoreCard[ball.ballBy];
+        if (!baller) {
+          scoreCard[ball.ballBy] = {
+            runs: ball.runs,
+            balls: 1,
+            zeros: isScoreCount(ball, 0),
+            fours: isScoreCount(ball, 4),
+            sixes: isScoreCount(ball, 6),
+            outs: 0, // will be calculated in last block
+            maiden: 0,
+          };
+        } else {
+          scoreCard[ball.ballBy].runs = (scoreCard[ball.ballBy].runs || 0) + ball.runs;
+          scoreCard[ball.ballBy].balls = (scoreCard[ball.ballBy].balls || 0) + 1;
+          scoreCard[ball.ballBy].zeros = (scoreCard[ball.ballBy].zeros || 0) + isScoreCount(ball, 0);
+          scoreCard[ball.ballBy].fours = (scoreCard[ball.ballBy].fours || 0) + isScoreCount(ball, 4);
+          scoreCard[ball.ballBy].sixes = (scoreCard[ball.ballBy].sixes || 0) + isScoreCount(ball, 6);
+          scoreCard[ball.ballBy].maiden = (scoreCard[ball.ballBy].maiden || 0) + isMaiden(ball);
+        }
+        if (ball.outBy) {
+          if (!scoreCard[ball.outBy]) {
+            scoreCard[ball.outBy] = {
+              outs: isNotOut(ball) ? 0 : 1,
+            };
+          } else {
+            scoreCard[ball.outBy].outs = (scoreCard[ball.outBy].outs || 0) + (isNotOut(ball) ? 0 : 1);
+          }
+        }
+      });
+    });
+  }
+  return scoreCard;
 };
 
 export default ballToOvers;

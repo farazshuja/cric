@@ -50,10 +50,16 @@
 </template>
 
 <script>
-import ballToOvers, { calculateAllPoints } from '../utils';
+import ballToOvers, { calculateAllPoints, matchToScoreCard } from '../utils';
 
 
 export default {
+  props: {
+    match: {
+      type: Object,
+      default: null,
+    },
+  },
   data() {
     return {
       score: null,
@@ -63,6 +69,7 @@ export default {
         team: '',
         runs: '',
       },
+      scoreCard: {},
     };
   },
   computed: {
@@ -72,11 +79,14 @@ export default {
   },
   created() {
     this.loadAllRuns();
+    if (this.match) {
+      this.scoreCard = matchToScoreCard(this.match);
+    }
   },
   methods: {
     ballToOvers,
     loadAllRuns() {
-      const { match } = this.$store.state;
+      const match = this.match || this.$store.state.match;
       const obj = calculateAllPoints(match);
       this.score = obj.score;
       this.points = obj.points;

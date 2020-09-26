@@ -38,8 +38,11 @@
         {{ ballToOvers(baller.balls) }} - {{ baller.runs }} - {{ baller.outs }}W
       </div>
     </div>
-    <points v-else class="mt-12" />
-    <div class="fixed bottom-0 left-0 w-full">
+    <points
+      v-else class="mt-12"
+      :match="match"
+    />
+    <div class="fixed bottom-0 left-0 w-full bg-opal">
       <div class="tabs flex flex-row">
         <div
           v-for="(tab, i) in tabs"
@@ -57,12 +60,13 @@
 
 <script>
 import firebase from 'firebase';
-import { mapGetters } from 'vuex';
-import ballToOvers from '@/utils.js';
+import ballToOvers, { matchToBats, matchToBallers } from '@/utils.js';
 import CrNav from '@/components/CrNav.vue';
 import Points from '../components/Points.vue';
+// import matchData from '../data/match.json';
 
 export default {
+  name: 'ViewMatch',
   components: {
     CrNav,
     Points,
@@ -77,14 +81,15 @@ export default {
     return {
       currentTab: 0, // inns 1
       tabs: ['INNS - 1', 'INNS - 2', 'INNS - 3', 'INNS-4', 'POINTS'],
+      match: null,
     };
   },
   computed: {
     players() {
-      return this.getBats(this.currentTab);
+      return matchToBats(this.match, this.currentTab);
     },
     ballers() {
-      return this.getBallers(this.currentTab);
+      return matchToBallers(this.match, this.currentTab);
     },
     total() {
       const total = {
@@ -104,12 +109,6 @@ export default {
       total.overs = ballToOvers(totalBalls);
       return total;
     },
-    ...mapGetters({
-      match: 'getCurrentMatch',
-      getBats: 'getBats',
-      getBallers: 'getBallers',
-      getAllPlayers: 'getAllPlayers',
-    }),
   },
   async created() {
     this.$store.commit('setIsLoading', true);
@@ -120,14 +119,11 @@ export default {
       .then(async (d) => {
         this.$store.commit('setIsLoading', false);
         const match = d.data();
-        if (match) {
-          if (match) {
-            await this.$store.commit('setMatch', match);
-          } else {
-            alert('No match found');
-            this.$router.push({ name: 'Home' });
-          }
+        if (!match) {
+          alert('No match found');
+          this.$router.push({ name: 'Home' });
         }
+        this.match = match;
         this.activateLastInns();
       });
   },

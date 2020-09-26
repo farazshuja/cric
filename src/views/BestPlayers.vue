@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col items-center h-full justify-center">
+  <div class="flex flex-col">
     <h1 class="text-2xl">Best players</h1>
     <vue-good-table
       :sort-options="{
         enabled: true,
-        initialSortBy: {field: 'average', type: 'desc'}
+        initialSortBy: {field: 'runs', type: 'desc'}
       }"
       :columns="columns"
       :rows="rows"/>
@@ -21,6 +21,12 @@ export default {
   name: 'BestPlayers',
   components: {
     VueGoodTable,
+  },
+  props: {
+    series: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
@@ -80,7 +86,10 @@ export default {
           thirtyFives: 0,
         };
       });
-      const data = await this.$store.dispatch('getAllMatches');
+      const data1 = await this.$store.dispatch('getAllMatches');
+      const data = this.series
+        ? data1.filter((d) => d.series === this.series)
+        : data1;
       data.forEach((d) => {
         d.inns.forEach((inn) => {
           if (inn.balls.length === 0) {
