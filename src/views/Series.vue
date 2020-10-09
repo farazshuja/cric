@@ -56,45 +56,13 @@ export default {
     async loadSeries() {
       this.$store.commit('setIsLoading', true);
       try {
-        const data = await this.$store.dispatch('getSeries');
-        const series = {};
-        data.forEach((d) => {
-          const match = {
-            id: d.id,
-            team1: d.team1,
-            team2: d.team2,
-          };
-          if (series[d.series]) {
-            series[d.series].push(match);
-          } else {
-            series[d.series] = [match];
-          }
-        });
-
-        Object.keys(series).sort((a, b) => {
-          const a1 = Number(a.split('-'));
-          const b1 = Number(b.split('-'));
-          return b1 - a1;
-        }).forEach((key) => {
-          this.series.push({
-            series: key,
-            matches: series[key],
-          });
-        });
-      // eslint-disable-next-line
-      } catch (e) {}
+        this.series = await this.$store.dispatch('getSeriesGroup');
+      } catch (e) {
+        alert(e);
+      }
       this.$store.commit('setIsLoading', false);
     },
-    onMatchClick(match) {
-      const localMatch = localStorage.getItem('match');
-      if (localMatch) {
-        const matchData = JSON.parse(localMatch);
-        if (matchData.id === match.id) {
-          this.setMatch(JSON.parse(localMatch));
-          this.$router.push({ name: 'LastMatch' });
-          return;
-        }
-      }
+    async onMatchClick(match) {
       this.$router.push({ name: 'ViewMatch', params: { id: match.id } });
     },
     onSeriesClick(s) {

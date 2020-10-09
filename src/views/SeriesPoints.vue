@@ -94,10 +94,10 @@ export default {
             const point = points[key];
             return {
               country: key,
-              WLD: point.WLD.join('-'),
-              ballerPoints: point.ballerPoints.join('-'),
-              batPoints: point.batPoints.join('-'),
-              batTeamPoints: point.batTeamPoints.join('-'),
+              WLD: point.WLD.reduce((a, b) => a + b, 0),
+              ballerPoints: point.ballerPoints.reduce((a, b) => a + b, 0),
+              batPoints: point.batPoints.reduce((a, b) => a + b, 0),
+              batTeamPoints: point.batTeamPoints.reduce((a, b) => a + b, 0),
               total: point.total.reduce((a, b) => a + b, 0),
             };
           }).sort((a, b) => b.total - a.total);

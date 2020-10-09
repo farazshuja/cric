@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import firebase from 'firebase';
 import CrButton from '@/components/CrButton.vue';
 
 export default {
@@ -22,27 +21,11 @@ export default {
     CrButton,
   },
   methods: {
-    deleteLastMatch() {
-      localStorage.removeItem('match');
-    },
     newMatch() {
       this.$router.push({ name: 'NewMatch' });
     },
-    saveLastMatch() {
-      const matches = firebase.firestore()
-        .collection('matches');
-      const lastMatch = localStorage.getItem('match');
-      matches.add(JSON.parse(lastMatch))
-        .then(() => {
-          alert('Saved successfully');
-        })
-        .catch(() => alert('Save failed'));
-    },
     getSeries() {
       this.$router.push({ name: 'Series' });
-    },
-    getHallOfFames() {
-      this.$router.push({ name: 'BestPlayers' });
     },
   },
 };

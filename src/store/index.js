@@ -2,7 +2,12 @@
 import firebase from 'firebase';
 import Vue from 'vue';
 import Vuex from 'vuex';
-import ballToOvers, { getNewInns, getTotal } from '@/utils.js';
+import ballToOvers, {
+  getNewInns,
+  getTotal,
+  calculateAllPoints,
+} from '@/utils.js';
+import { groupBySeries } from './parser';
 
 Vue.use(Vuex);
 
@@ -273,6 +278,36 @@ export default new Vuex.Store({
           created: d.timestamp,
         };
       }).sort((a, b) => b.created - a.created);
+    },
+    // Return matches grouped by series
+    async getSeriesGroup() {
+      const snapshot = await firebase.firestore()
+        .collection('matches')
+        .orderBy('timestamp', 'desc')
+        .limit(15)
+        .get();
+      const matches = snapshot.docs.map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          series: d.series,
+          team1: d.team1,
+          team2: d.team2,
+          timestamp: d.timestamp,
+        };
+      });
+      return groupBySeries(matches);
+    },
+    async getMatchById(context, id) {
+      const snapshot = await firebase.firestore()
+        .collection('matches')
+        .doc(id)
+        .get();
+      return snapshot.data();
+    },
+    saveAllStats(context, match) {
+      const { points } = calculateAllPoints(match);
+      console.log(points);
     },
   },
   modules: {

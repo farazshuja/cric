@@ -218,6 +218,7 @@ export const calculateAllPoints = (match) => {
       country: key,
       total,
       ...p,
+      team: match.team1.includes(key) ? 'team1' : 'team2',
     };
   }).sort((a, b) => b.total - a.total);
 

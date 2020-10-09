@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cric-bdc72",
+  "private_key_id": "677e48f98a03a55655959b32d348d17f9a65c90c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCeaZ6jr2AvdSFu\nWArh4stNTvERXUFaaWyI7PIjAW2Z5BtH81nvAROgWePIBJscQ/8s01i4P3tERtnz\nwUf/U9G4AX4n5wkun5GpJpdJySY5Yn1FDZzlaH461BFF72WkhfG9HbWtLIHJqwnz\nCUSBmVeM4nriZbQB/N4oeWDEA/TRtRRahMqhJotr4sunudz6gZIQ63QgxMdUQRT1\nZa/HT7HBo3FAsWW4eMiwr+sYONlAEYUJhfzYG/Jks2OKn2wGYnNfiNloRm5dwiUr\njCqYn4gf7s1ydYbZi+pTKSI8oHpgQmqJm/r9z5X8QoR1VAbtBIq8NHIFZMG9g/z7\nhk8Ul88bAgMBAAECggEAI3HulSGAnB3RRSdeB/z/EGVBe2kqXliIeHrMExkWtQBd\nOlQxI1FSWubCGNcu/bwZNKZ1i4RoyHYx/mCZA4B1xH5RBAyl+VCq/vYrk872RpDL\nBtBs8sfWtsMMumE+lPmDhZVIOV9kCwPCTicctQLinBtw84deJ7O04cmG5VUdSm6n\n3wCPC0kqQPAFAR8dyrAQ2FG3d6E3uwGkFnbGTf10xdsbn4MnVR68iWW1da3Fira0\n6sQILOs2jzpdMTARQxc2nAsdoRD0B8HObFO8sQWMIUqVPGu5a/sTO3Q34wTlj5x6\nKi1znZizp7pXKRtzLFftP60h7JAIspALe4EEh56fAQKBgQDPTlf5+be1rE7xr+RL\nObfZR+FzRAkyXiw9lPg70KuETwFqjLv6dKiNl1nnl3ExhPyCtR9jk4Nk7MkWP12S\nspc8vCpeMVpdJHAzZMc1Vnn+8muBoWosSU6Fe5hvD0VcGd0WMldc/G76oYSE4bPr\nziC5RpOCNpe5rON2/UuJAnUIiwKBgQDDnzs7/J967nbWdOY1Q/e/nzxJCzpn6pru\nsscsGBgwLuYnwc55Oe5eblnN9BWHvWHUWvLEi+dmmY6/DmmcGa+rnivlAVEX6k8u\n11n1mCOhXAru9XqzrDu7UX/h1mceecF5p3DJ8hQwpTeGAsAnRlwtyGgRBIlX5/j2\no17yDZyVsQKBgEI0oQAicjtA9k1VgTFNE5v+ys+HEPDXBoX8R3LC56Pvn2Ip4/bO\nvu3JQlsmEG5iLEqKEaY5fCMFRAso3Xd2Nbqd1WITnOpWMscXDk/IeFmljhPuOvw9\nxSf4GuyNEfeiAuuN1DzMGZ1NbAcMFeve/rBtC7rwOHCB+HsN1cvBzyKVAoGBAMGt\nA6NXcLnwIH4hDM7NtRrl13TmBfReZPhQzjrMvB3wQPQ5wGdrQKIDlSwALdTPXm01\ngkevz/FXtOlZppvjHnbGSeUYEaag17ajhbBO6W/XRgfhyJLcweKqRPdeI4gbub7t\nVRDLeMvUt40Zag84bQjy8n1uxV/gDjB5/QWfDllxAoGBAIqrgYVV8D1vUEbz9Sel\nhtdy0zZdFdBMJJT10632eszEBVwrkZ5kQeTG1YKmQxQAGgU8rOORXg4vg38Vex94\nrOkOoxrBA65e3SwJhN6um8gHWy78ZL5MoAaJr2hU0WjAKhQOdEsFZ21aUL6pDi5H\nBRIE7yswFU4pMqsNs+JG2BtI\n-----END PRIVATE KEY-----\n",
+  "client_email": "cric-firebase@cric-bdc72.iam.gserviceaccount.com",
+  "client_id": "112539987924157929964",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cric-firebase%40cric-bdc72.iam.gserviceaccount.com"
+}

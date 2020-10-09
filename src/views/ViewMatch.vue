@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import firebase from 'firebase';
 import ballToOvers, { matchToBats, matchToBallers } from '@/utils.js';
 import CrNav from '@/components/CrNav.vue';
 import Points from '../components/Points.vue';
@@ -112,27 +111,11 @@ export default {
   },
   async created() {
     this.$store.commit('setIsLoading', true);
-    firebase.firestore()
-      .collection('matches')
-      .doc(this.id)
-      .get()
-      .then(async (d) => {
-        this.$store.commit('setIsLoading', false);
-        const match = d.data();
-        if (!match) {
-          alert('No match found');
-          this.$router.push({ name: 'Home' });
-        }
-        this.match = match;
-        this.activateLastInns();
-      });
+    this.match = await this.$store.dispatch('getMatchById', this.id);
+    this.$store.commit('setIsLoading', false);
   },
   methods: {
     ballToOvers,
-    // activate the last inns or show Points
-    activateLastInns() {
-      this.currentTab = this.match.inns.length - 1;
-    },
     openTab(i) {
       if (this.match.inns[i] || i === 4) {
         this.currentTab = i;
