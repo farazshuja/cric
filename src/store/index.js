@@ -231,11 +231,16 @@ export default new Vuex.Store({
       const curBat = getTotal(state.match.inns[innsIndex].bats);
       let nextToBat = state.match.inns[innsIndex].ballers.map((b) => b.country);
       let nextToBall = state.match.inns[innsIndex].bats.slice(0, 2).map((b) => b.country);
-      if ((curBat.outs === 3 || curBat.balls === 60) || isDeclared) {
+      const maxBallsPerInns = state.match.isOneDay ? 36 : 60;
+      // skip handling next inns in case of one-day
+      if (innsIndex === 2 && state.match.isOneDay) {
+        return;
+      }
+      if ((curBat.outs === 3 || curBat.balls === maxBallsPerInns) || isDeclared) {
         if (innsIndex === 1) {
           const preBat = getTotal(state.match.inns[0].bats);
-          // follow on
-          if ((preBat.runs / 2) > curBat.runs) {
+          // follow on case only for test match
+          if (!state.match.isOneDay && (preBat.runs / 2) > curBat.runs) {
             [nextToBat, nextToBall] = [nextToBall, nextToBat];
           }
         }

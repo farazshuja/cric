@@ -170,6 +170,9 @@ export default {
     },
     // activate the last inns or show Points
     activateLastInns() {
+      if (this.match.isOneDay) {
+        return;
+      }
       this.currentTab = this.match.inns.length - 1;
     },
     onCustomMenu(e) {

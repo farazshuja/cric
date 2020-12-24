@@ -8,11 +8,12 @@
       <label class="w-32">Series:</label>
       <input v-model="series" class="flex-grow" type="text" list="series" />
       <datalist id="series">
-        <option>Series-8</option>
-        <option>Series-9</option>
-        <option>Series-10</option>
-        <option>Series-11</option>
         <option>Series-12</option>
+        <option>Series-13</option>
+        <option>Series-14</option>
+        <option>Series-15</option>
+        <option>Series-16</option>
+        <option>Series-17</option>
       </datalist>
     </div>
     <div class="flex flex-row mb-5">
@@ -65,21 +66,13 @@
         </option>
       </select>
     </div>
+    <div class="flex flex-row mb-5">
+      <label class="w-32">One Day</label>
+      <input type="checkbox" v-model="isOneDay" />
+    </div>
     <p class="text-center">
       <cr-button @click.native="startMatch()">Start</cr-button>
       <cr-button @click.native="$router.push({ name: 'Home' })">Cancel</cr-button>
-      <!-- <button
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded"
-        @click="startMatch()"
-      >
-        Start
-      </button>
-      <button
-        class="border-2 border-gray text-gray py-1 px-5 font-semibold rounded ml-1"
-        @click="$router.push({ name: 'Home' })"
-      >
-        Cancel
-      </button> -->
     </p>
   </div>
 </template>
@@ -106,6 +99,7 @@ export default {
       toBat: 'Team1',
       toBall: 'Team2',
       isBatting: 'Team1',
+      isOneDay: false,
     };
   },
   computed: {
@@ -140,6 +134,7 @@ export default {
           toBat: this.isBatting === 'Team1' ? 'Team1' : 'Team2',
           toBall: this.isBatting === 'Team1' ? 'Team2' : 'Team1',
           timestamp: parseInt(new Date().getTime() / 1000, 10),
+          isOneDay: this.isOneDay,
         };
         const matches = firebase.firestore()
           .collection('matches');

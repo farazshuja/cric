@@ -125,9 +125,9 @@ export const innsToTeamPoints = (inn) => {
   return p;
 };
 
-export const scoreToWinPoints = (score) => {
+export const scoreToWinPoints = (score, isOneDay) => {
   let result = null;
-  if (score && score.length === 2) {
+  if (score && score.length === 2 && !isOneDay) {
     const totalInns = score[0].inns.length + score[1].inns.length;
     const team1 = score[0].team.split('-');
     const team2 = score[1].team.split('-');
@@ -159,6 +159,17 @@ export const scoreToWinPoints = (score) => {
           result = teamResult(team1, 5, team2, 0);
         }
       }
+    }
+  }
+  if (score && score.length === 2 && isOneDay) {
+    const team1 = score[0].team.split('-');
+    const team2 = score[1].team.split('-');
+    if (score[0].inns[0]?.runs > score[1].inns[0]?.runs) {
+      result = teamResult(team1, 3, team2, 0);
+    } else if (score[0].inns[0]?.runs < score[1].inns[0]?.runs) {
+      result = teamResult(team1, 0, team2, 3);
+    } else {
+      result = teamResult(team1, 1, team2, 1);
     }
   }
   return result; // no result so far
@@ -210,7 +221,7 @@ export const calculateAllPoints = (match) => {
     team: key,
     inns: result[key],
   }));
-  points = merge(points, scoreToWinPoints(score));
+  points = merge(points, scoreToWinPoints(score, match.isOneDay));
   points = Object.keys(points).map((key) => {
     const p = points[key];
     const total = p.batPoints + p.ballerPoints + p.batTeamPoints + p.WLD;
